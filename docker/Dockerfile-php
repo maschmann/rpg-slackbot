@@ -1,0 +1,31 @@
+FROM php:8.0-fpm
+
+ENV PROJECT_ROOT=/var/www/symfony
+
+RUN apt-get update && apt-get install -y
+# You can check all possible installation here : https://gist.github.com/chronon/95911d21928cff786e306c23e7d1d3f3
+RUN apt-get install -y --no-install-recommends \
+        git \
+        zlib1g-dev \
+        libxml2-dev \
+        libzip-dev \
+        libpq-dev \
+        nano \
+        unzip \
+    && docker-php-ext-install \
+        zip \
+        intl \
+        pdo \
+        mysqli \
+        pdo_mysql \
+        opcache
+# Install Composer !
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer \
+  && curl -sS https://get.symfony.com/cli/installer | bash \
+  && mv /root/.symfony/bin/symfony /usr/local/bin/symfony \
+  && useradd -u 1000 -d  $PROJECT_ROOT -s /bin/bash symfony
+
+# Set the default directory inside the container
+WORKDIR $PROJECT_ROOT
+USER symfony
+ADD --chown=symfony . .

@@ -1,0 +1,64 @@
+#docker-compose.yml
+version: '3.7'
+services:
+
+  db:
+    image: mariadb:latest # The image from Docker Hub
+    container_name: rpg_bot_db
+    environment: # This is my settings, change them as you prefer
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DB}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    networks:  # Allows to communicate with other services with the same network
+      - rpg_bot
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: rpg_bot_phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: db # Same name that the database service, here db
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+    networks:
+      - rpg_bot
+
+  php:
+    container_name: rpg_bot_php
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-php
+    environment: # We set some environments variables to facilitate debug
+      APP_ENV: dev
+      APP_DEBUG: 1
+    volumes:
+      - files:/var/www/symfony # It has to match with the WORKDIR inside the docker file
+    networks:
+      - rpg_bot
+
+  nginx:
+    container_name: rpg_bot_nginx
+    depends_on:
+      - php # We need to load PHP for the Nginx configuration file
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-nginx
+    ports:
+      - 8000:80
+      - 8443:443
+    networks:
+      - rpg_bot
+
+networks:
+  rpg_bot:
+
+volumes:
+  files: # Same name as inside the container php
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ./
