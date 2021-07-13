@@ -49,6 +49,8 @@ services:
     ports:
       - 8000:80
       - 8443:443
+    volumes:
+      - files:/var/www/symfony
     networks:
       - rpg_bot
 

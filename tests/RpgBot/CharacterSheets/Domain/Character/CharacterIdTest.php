@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\RpgBot\CharacterSheets\Domain\Character;
 
-use Ramsey\Uuid\UuidInterface;
 use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +27,7 @@ class CharacterIdTest extends TestCase
     public function testDomainException(): void
     {
         $this->expectException(\DomainException::class);
-        
+
         CharacterId::fromString('some_string_but_no_uuid');
     }
 }

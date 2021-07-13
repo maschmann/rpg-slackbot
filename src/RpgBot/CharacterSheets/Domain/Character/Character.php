@@ -10,5 +10,7 @@ namespace RpgBot\CharacterSheets\Domain\Character;
 class Character
 {
     private string $name;
-    //private
+    private CharacterId $characterId;
+
+
 }
