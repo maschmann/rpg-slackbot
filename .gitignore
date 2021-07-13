@@ -26,3 +26,5 @@
 ###< symfony/phpunit-bridge ###
 /.composer
 /.composer/*.json
+.bash_history
+.composer
