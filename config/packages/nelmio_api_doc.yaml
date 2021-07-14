@@ -1,11 +1,12 @@
 nelmio_api_doc:
+    models: { use_jms: false }
     documentation:
         info:
             title: RPG Bot
-            description: This is a RPG slack bot :-)
+            description: This is an RPG slack bot :-)
             version: 1.0.0
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
-        host_patterns:
-            - ^api\.
+        #host_patterns:
+        #    - ^api\.

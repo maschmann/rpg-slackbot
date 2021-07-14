@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace RpgBot\CharacterSheets\Domain\Character;
 
 use Ramsey\Uuid\Uuid;
+use OpenApi\Annotations as OA;
 
 class CharacterId
 {
+    /**
+     * @OA\Property(type="string")
+     */
     private string $id;
 
     private function __construct(string $id)

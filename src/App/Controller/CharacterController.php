@@ -10,6 +10,7 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use RpgBot\CharacterSheets\Domain\Character\Character;
 
 #[Route('api/characters')]
 class CharacterController
@@ -37,6 +38,22 @@ class CharacterController
         return new JsonResponse();
     }
 
+    /**
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns a character",
+     *     @OA\JsonContent()
+     * )
+     *
+     * @OA\Parameter(
+     *     name="name",
+     *     in="query",
+     *     description="The name of the character",
+     *     @OA\Schema(type="string")
+     * )
+     * @OA\Tag(name="characters")
+     * @Security(name="Bearer")
+     */
     #[Route('/{name}', name: 'character_by_name', requirements: ['page' => '\w+'], methods: ['GET', 'HEAD'])]
     public function byName(string $name): JsonResponse
     {
