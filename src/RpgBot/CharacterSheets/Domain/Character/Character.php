@@ -21,4 +21,10 @@ class Character
      * @OA\Property(ref=@Model(type=CharacterId::class))
      */
     private CharacterId $characterId;
+
+    private function __construct(
+        CharacterId $characterId,
+    ) {
+        $this->characterId = $characterId;
+    }
 }
