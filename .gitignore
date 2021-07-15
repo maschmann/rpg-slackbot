@@ -27,3 +27,4 @@
 /.composer
 /.composer/*.json
 .bash_history
+phpcs-report.xml
