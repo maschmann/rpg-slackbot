@@ -42,7 +42,7 @@ jobs:
       #  run: bin/phpunit --printer mheap\\GithubActionsReporter\\Printer -c phpunit.xml.dist
 
       - name: Run UnitTests
-        run: bin/phpunit --printer mheap\\GithubActionsReporter\\Printer -c phpunit.xml.dist
+        run: bin/phpunit -c phpunit.xml.dist --testdox
 
       - name: Run phpstan
         run: phpstan analyse --error-format=checkstyle -c "phpstan.neon" | cs2pr
