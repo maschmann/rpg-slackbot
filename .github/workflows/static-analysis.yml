@@ -35,17 +35,17 @@ jobs:
       - name: Install dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist -q
 
-      - name: Install phpunit output for PRs
-        run: composer require mheap/phpunit-github-actions-printer
+      #- name: Install phpunit output for PRs
+      #  run: composer require mheap/phpunit-github-actions-printer
+
+      #- name: Run UnitTests
+      #  run: bin/phpunit --printer mheap\\GithubActionsReporter\\Printer -c phpunit.xml.dist
 
       - name: Run UnitTests
         run: bin/phpunit --printer mheap\\GithubActionsReporter\\Printer -c phpunit.xml.dist
 
       - name: Run phpstan
         run: phpstan analyse --error-format=checkstyle -c "phpstan.neon" | cs2pr
-
-      #- name: Run psalm
-      #  run: psalm -c psalm.xml --output-format=github
 
       - name: Check PHP code style
         continue-on-error: true
