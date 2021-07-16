@@ -1,6 +1,8 @@
 FROM php:8.0-fpm
 
-ENV PROJECT_ROOT=/var/www/symfony
+ENV PROJECT_ROOT=/var/www/symfony \
+    COMPOSER_HOME=/var/cache \
+    PROJECT_USER=symfony
 
 RUN apt-get update && apt-get install -y
 # You can check all possible installation here : https://gist.github.com/chronon/95911d21928cff786e306c23e7d1d3f3
@@ -23,9 +25,10 @@ RUN apt-get install -y --no-install-recommends \
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer \
   && curl -sS https://get.symfony.com/cli/installer | bash \
   && mv /root/.symfony/bin/symfony /usr/local/bin/symfony \
-  && useradd -u 1000 -d  $PROJECT_ROOT -s /bin/bash symfony
+  && useradd -u 1000 -d  $PROJECT_ROOT -s /bin/bash $PROJECT_USER \
+  && chown -R $PROJECT_USER:$PROJECT_USER $COMPOSER_HOME
 
 # Set the default directory inside the container
 WORKDIR $PROJECT_ROOT
-USER symfony
-ADD --chown=symfony . .
+USER $PROJECT_USER
+ADD --chown=$PROJECT_USER . .
