@@ -6,7 +6,7 @@ namespace Tests\RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Attribute;
 use PHPUnit\Framework\TestCase;
-use RpgBot\CharacterSheets\Domain\Character\Exception\LevelInvalidException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidLevelException;
 
 class AttributeTest extends TestCase
 {
@@ -23,19 +23,13 @@ class AttributeTest extends TestCase
 
     public function testAttributeLowerLimitException(): void
     {
-        $this->expectException(LevelInvalidException::class);
-        $name = 'strength';
-        $level = -1;
-
-        $attribute = Attribute::create($name, $level);
+        $this->expectException(InvalidLevelException::class);
+        Attribute::create('other', -1);
     }
 
     public function testAttributeUpperLimitException(): void
     {
-        $this->expectException(LevelInvalidException::class);
-        $name = 'strength';
-        $level = 100;
-
-        $attribute = Attribute::create($name, $level);
+        $this->expectException(InvalidLevelException::class);
+        Attribute::create('test', 100);
     }
 }
