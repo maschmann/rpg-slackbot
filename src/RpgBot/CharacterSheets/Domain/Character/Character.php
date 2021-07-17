@@ -14,7 +14,10 @@ class Character
     use CheckLevelTrait;
 
     private const MAX_LEVEL = 99;
+
     private const MIN_LEVEL = 0;
+
+    private CharacterId $characterId;
 
     private string $name;
 
@@ -22,22 +25,61 @@ class Character
 
     private int $experience;
 
-    private CharacterId $characterId;
+    /**
+     * @var Achievement[]
+     */
+    private array $achievements;
 
+    /**
+     * @var Attribute[]
+     */
+    private array $attributes;
+
+    /**
+     * @var Skill[]
+     */
+    private array $skills;
+
+    /**
+     * @param CharacterId $characterId
+     * @param string $name
+     * @param int $level
+     * @param Skill[] $skills
+     * @param Achievement[] $achievements
+     * @param Attribute[] $attributes
+     */
     private function __construct(
         CharacterId $characterId,
         string $name,
         int $level = 0,
+        array $skills = [],
+        array $achievements = [],
+        array $attributes = [],
     ) {
         $this->characterId = $characterId;
         $this->name = $name;
         $this->level = $level;
+        $this->skills = $skills;
+        $this->attributes = $attributes;
+        $this->achievements = $achievements;
     }
 
+    /**
+     * @param CharacterId $characterId
+     * @param string $name
+     * @param int $level
+     * @param Skill[] $skills
+     * @param Achievement[] $achievements
+     * @param Attribute[] $attributes
+     * @return self
+     */
     public static function create(
         CharacterId $characterId,
         string $name,
         int $level = 0,
+        array $skills = [],
+        array $achievements = [],
+        array $attributes = [],
     ): self {
         // if name is already taken, we should check later
         if ('' === $name) {
@@ -46,7 +88,7 @@ class Character
 
         self::checkLevel($level);
 
-        return new self($characterId, $name);
+        return new self($characterId, $name, $level, $skills, $achievements, $attributes);
     }
 
     public function getCharacterId(): string
@@ -62,5 +104,29 @@ class Character
     public function getLevel(): int
     {
         return $this->level;
+    }
+
+    /**
+     * @return Skill[]
+     */
+    public function getSkills(): array
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @return Achievement[]
+     */
+    public function getAchievements(): array
+    {
+        return $this->achievements;
     }
 }

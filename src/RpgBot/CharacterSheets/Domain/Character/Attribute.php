@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Domain\Character;
 
-class Attribute extends PropertyAbstract
+final class Attribute extends BaseProperty
 {
 }

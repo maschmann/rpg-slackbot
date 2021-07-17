@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Domain\Character;
 
-class Skill extends PropertyAbstract
+final class Skill extends BaseProperty
 {
-
 }

@@ -11,12 +11,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use RpgBot\CharacterSheets\Domain\Character\Character;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('api/characters')]
 class CharacterController
 {
     public function __construct(
-        private MessageBusInterface $messageBus
+        private MessageBusInterface $queryBus,
+        private MessageBusInterface $commandBus,
+        private SerializerInterface $serializer,
     ) {
     }
 

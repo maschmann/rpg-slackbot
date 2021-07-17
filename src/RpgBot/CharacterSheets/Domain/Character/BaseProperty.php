@@ -6,7 +6,7 @@ namespace RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 
-class PropertyAbstract
+class BaseProperty
 {
     use CheckLevelTrait;
 

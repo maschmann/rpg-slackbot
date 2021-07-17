@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Domain\Character;
 
-class Achievement extends PropertyAbstract
+final class Achievement extends BaseProperty
 {
-
 }

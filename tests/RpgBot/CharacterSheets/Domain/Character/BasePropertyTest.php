@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace Tests\RpgBot\CharacterSheets\Domain\Character;
 
-use RpgBot\CharacterSheets\Domain\Character\Attribute;
+use RpgBot\CharacterSheets\Domain\Character\BaseProperty;
 use PHPUnit\Framework\TestCase;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidLevelException;
 
-class AttributeTest extends TestCase
+class BasePropertyTest extends TestCase
 {
-    public function testCreateAttribute(): void
+    public function testCreateBaseProperty(): void
     {
         $name = 'strength';
         $level = 3;
 
-        $attribute = Attribute::create($name, $level);
+        $attribute = BaseProperty::create($name, $level);
 
         $this->assertSame($name, $attribute->getName());
         $this->assertSame($level, $attribute->getLevel());
     }
 
-    public function testAttributeLowerLimitException(): void
+    public function testBasePropertyLowerLimitException(): void
     {
         $this->expectException(InvalidLevelException::class);
-        Attribute::create('other', -1);
+        BaseProperty::create('other', -1);
     }
 
-    public function testAttributeUpperLimitException(): void
+    public function testBasePropertyUpperLimitException(): void
     {
         $this->expectException(InvalidLevelException::class);
-        Attribute::create('test', 100);
+        BaseProperty::create('test', 100);
     }
 }

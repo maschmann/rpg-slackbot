@@ -30,6 +30,9 @@ services:
 
     RpgBot\:
         resource: '../src/RpgBot/'
+        exclude:
+            - '../src/RpgBot/**/Exception'
+            - '../src/RpgBot/**/Contract'
 
     #RpgBot\CharacterSheet\Application\Command\Character\CharacterChangeHandler:
     #    tags: [messenger.message_handler]
