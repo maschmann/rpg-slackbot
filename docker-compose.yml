@@ -10,6 +10,8 @@ services:
       MYSQL_DATABASE: "${MYSQL_DB}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    ports:
+      - 4306:3306
     networks:  # Allows to communicate with other services with the same network
       - rpg_bot
 

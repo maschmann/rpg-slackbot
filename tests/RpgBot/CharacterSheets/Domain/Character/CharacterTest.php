@@ -21,7 +21,7 @@ class CharacterTest extends TestCase
 
         $this->assertSame($characterId->toString(), $character->getCharacterId());
         $this->assertSame($name, $character->getName());
-        $this->assertSame(0, $character->getLevel());
+        $this->assertSame(1, $character->getLevel());
     }
 
     public function testCharacterNameEmptyException(): void

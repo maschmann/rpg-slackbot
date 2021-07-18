@@ -15,7 +15,7 @@ class Character
 
     private const MAX_LEVEL = 99;
 
-    private const MIN_LEVEL = 0;
+    private const MIN_LEVEL = 1;
 
     private CharacterId $characterId;
 
@@ -51,7 +51,7 @@ class Character
     private function __construct(
         CharacterId $characterId,
         string $name,
-        int $level = 0,
+        int $level = 1,
         array $skills = [],
         array $achievements = [],
         array $attributes = [],
@@ -76,7 +76,7 @@ class Character
     public static function create(
         CharacterId $characterId,
         string $name,
-        int $level = 0,
+        int $level = 1,
         array $skills = [],
         array $achievements = [],
         array $attributes = [],
@@ -104,6 +104,11 @@ class Character
     public function getLevel(): int
     {
         return $this->level;
+    }
+
+    public function getExperience(): int
+    {
+        return $this->experience;
     }
 
     /**
