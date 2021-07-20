@@ -11,12 +11,6 @@ use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
  */
 class Character
 {
-    use CheckLevelTrait;
-
-    private const MAX_LEVEL = 99;
-
-    private const MIN_LEVEL = 1;
-
     private CharacterId $characterId;
 
     private string $name;
@@ -43,7 +37,7 @@ class Character
     /**
      * @param CharacterId $characterId
      * @param string $name
-     * @param int $level
+     * @param int $experience
      * @param Skill[] $skills
      * @param Achievement[] $achievements
      * @param Attribute[] $attributes
@@ -51,14 +45,14 @@ class Character
     private function __construct(
         CharacterId $characterId,
         string $name,
-        int $level = 1,
+        int $experience = 0,
         array $skills = [],
         array $achievements = [],
         array $attributes = [],
     ) {
         $this->characterId = $characterId;
         $this->name = $name;
-        $this->level = $level;
+        $this->experience = $experience;
         $this->skills = $skills;
         $this->attributes = $attributes;
         $this->achievements = $achievements;
@@ -67,7 +61,7 @@ class Character
     /**
      * @param CharacterId $characterId
      * @param string $name
-     * @param int $level
+     * @param int $experience
      * @param Skill[] $skills
      * @param Achievement[] $achievements
      * @param Attribute[] $attributes
@@ -76,7 +70,7 @@ class Character
     public static function create(
         CharacterId $characterId,
         string $name,
-        int $level = 1,
+        int $experience = 0,
         array $skills = [],
         array $achievements = [],
         array $attributes = [],
@@ -86,9 +80,10 @@ class Character
             throw new InvalidNameException("A character needs a name");
         }
 
-        self::checkLevel($level);
+        // experience will translate to level
+        $intialLevel = 1;
 
-        return new self($characterId, $name, $level, $skills, $achievements, $attributes);
+        return new self($characterId, $name, $experience, $skills, $achievements, $attributes);
     }
 
     public function getCharacterId(): string

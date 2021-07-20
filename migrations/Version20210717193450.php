@@ -25,7 +25,6 @@ final class Version20210717193450 extends AbstractMigration
                 date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
                 name VARCHAR(255), 
-                level INT, 
                 experience INT
               )
         ');

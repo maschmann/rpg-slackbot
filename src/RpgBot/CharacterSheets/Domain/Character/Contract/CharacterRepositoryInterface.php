@@ -10,6 +10,7 @@ interface CharacterRepositoryInterface
 {
     public function create(Character $character): void;
     public function store(Character $character): void;
+    public function storeProperty(Character $character, BasePropertyInterface $property): void;
     public function addProperty(Character $character, BasePropertyInterface $property): void;
     public function delete(Character $character): void;
     public function getByName(string $name): ?Character;

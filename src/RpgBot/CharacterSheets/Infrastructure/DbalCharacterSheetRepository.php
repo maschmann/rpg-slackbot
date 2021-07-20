@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Infrastructure;
 
+use RpgBot\CharacterSheets\Domain\Character\Achievement;
+use RpgBot\CharacterSheets\Domain\Character\Attribute;
 use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Character;
@@ -21,19 +23,6 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
 
     public function store(Character $character): void
     {
-        /*$stmt = $this->connection->prepare('
-            INSERT INTO characters (id, name, level, experience)
-            VALUES (:id, :name, :level, :experience)
-        ');
-
-        $stmt->bindValue('id', $character->getId()->toString());
-        $stmt->bindValue('name', $character->getName());
-        $stmt->bindValue('level', $character->getLevel());
-        $stmt->bindValue('experience', $character->getExperience());
-
-        $stmt->executeQuery();
-        */
-
         $properties = array_merge(
             $character->getSkills(),
             $character->getAchievements(),
@@ -53,14 +42,29 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
 
         if (count($properties) > 0) {
             foreach ($properties as $property) {
-
+                $this->connection->update(
+                    'properties',
+                    [
+                        'level' => $property->getLevel(),
+                    ],
+                    [
+                        'id' => $character->getCharacterId(),
+                        'name' => $property->getName(),
+                        'type' => $property::class,
+                    ]
+                );
             }
         }
     }
 
     public function delete(Character $character): void
     {
-        // TODO: Implement delete() method.
+        $this->connection->delete(
+            'characters',
+            [
+                'name' => $character->getName(),
+            ]
+        );
     }
 
     /**
@@ -70,6 +74,10 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
      */
     public function getByName(string $name): ?Character
     {
+        $skills = [];
+        $achievements = [];
+        $attributes = [];
+
         $characterRaw = $this->connection->fetchAssociative(
             'SELECT id, name, level, experience FROM characters WHERE name = ?',
             [
@@ -83,12 +91,47 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             );
         }
 
+        $properties =  $this->connection->fetchAssociative(
+            'SELECT name, level, type FROM properties WHERE id = ?',
+            [
+                'id' => $characterRaw['id'],
+            ]
+        );
+
+        if (false !== $properties) {
+            foreach ($properties as $property) {
+                switch ($property['type']) {
+                    case Attribute::class:
+                        $attributes[] = Attribute::create(
+                            $property['name'],
+                            $property['level']
+                        );
+                        break;
+                    case Skill::class:
+                        $attributes[] = Skill::create(
+                            $property['name'],
+                            $property['level']
+                        );
+                        break;
+                    case Achievement::class:
+                        $attributes[] = Achievement::create(
+                            $property['name'],
+                            $property['level']
+                        );
+                        break;
+                }
+            }
+        }
+
         // @TODO add character properties in a sensible manner
         $character = Character::create(
             CharacterId::fromString($characterRaw['id']),
             $characterRaw['name'],
             $characterRaw['level'],
-            $characterRaw['experience']
+            $characterRaw['experience'],
+            $skills,
+            $achievements,
+            $attributes
         );
 
         return $character;
@@ -99,7 +142,27 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
      */
     public function getAll(): array
     {
-        // TODO: Implement getAll() method.
+        $characterList = [];
+
+        $characterListRaw = $this->connection->fetchAssociative(
+            'SELECT id, name, level, experience FROM characters'
+        );
+
+        if (false !== $characterListRaw) {
+            $characterList = \array_map(
+                function (array $row) {
+                    return Character::create(
+                        CharacterId::fromString($row['id']),
+                        $row['name'],
+                        $row['level'],
+                        $row['experience']
+                    );
+                },
+                $characterListRaw
+            );
+        }
+
+        return $characterList;
     }
 
     public function create(Character $character): void
@@ -115,8 +178,9 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         );
     }
 
-    public function addProperty(Character $character, BasePropertyInterface $property): void
+    public function storeProperty(Character $character, BasePropertyInterface $property): void
     {
-        // TODO: Implement addProperty() method.
     }
+
+
 }
