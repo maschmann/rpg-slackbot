@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Domain\Character;
 
+use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 
 /**
@@ -11,11 +12,11 @@ use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
  */
 class Character
 {
+    private const MIN_EXPERIENCE = 0;
+
     private CharacterId $characterId;
 
     private string $name;
-
-    private int $level;
 
     private int $experience;
 
@@ -80,6 +81,11 @@ class Character
             throw new InvalidNameException("A character needs a name");
         }
 
+        if (self::MIN_EXPERIENCE > $experience) {
+            throw new InvalidExperienceException(
+                sprintf("The minimum exterience is %s", self::MIN_EXPERIENCE)
+            );
+        }
         // experience will translate to level
         $intialLevel = 1;
 
@@ -98,7 +104,8 @@ class Character
 
     public function getLevel(): int
     {
-        return $this->level;
+        // arithmetic levelling progression, based on quadratic equation
+        return (1 + (int)floor((sqrt(625 + 100 * $this->experience) - 25) / 50));
     }
 
     public function getExperience(): int
