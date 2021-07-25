@@ -12,6 +12,7 @@ use RpgBot\CharacterSheets\Domain\Character\Character;
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
 use Doctrine\DBAL\Connection;
 use RpgBot\CharacterSheets\Domain\Character\Exception\CharacterNotFoundException;
+use RpgBot\CharacterSheets\Domain\Character\Skill;
 
 class DbalCharacterSheetRepository implements CharacterRepositoryInterface
 {
@@ -79,7 +80,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $attributes = [];
 
         $characterRaw = $this->connection->fetchAssociative(
-            'SELECT id, name, level, experience FROM characters WHERE name = ?',
+            'SELECT id, workspace, name, experience FROM characters WHERE name = ?',
             [
                 'name' => $name,
             ]
@@ -126,8 +127,8 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         // @TODO add character properties in a sensible manner
         $character = Character::create(
             CharacterId::fromString($characterRaw['id']),
+            $characterRaw['workspace'],
             $characterRaw['name'],
-            $characterRaw['level'],
             $characterRaw['experience'],
             $skills,
             $achievements,
@@ -182,5 +183,10 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
 
     public function storeProperty(Character $character, BasePropertyInterface $property): void
     {
+    }
+
+    public function addProperty(Character $character, BasePropertyInterface $property): void
+    {
+        // TODO: Implement addProperty() method.
     }
 }

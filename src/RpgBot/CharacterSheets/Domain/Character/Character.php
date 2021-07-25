@@ -38,6 +38,17 @@ class Character
      */
     private array $skills;
 
+    /**
+     * Character constructor.
+     *
+     * @param CharacterId $characterId
+     * @param string $workspace
+     * @param string $name
+     * @param int $experience
+     * @param Skill[] $skills
+     * @param Achievement[] $achievements
+     * @param Attribute[] $attributes
+     */
     private function __construct(
         CharacterId $characterId,
         string $workspace,
@@ -58,6 +69,7 @@ class Character
 
     /**
      * @param CharacterId $characterId
+     * @param string $workspace
      * @param string $name
      * @param int $experience
      * @param Skill[] $skills
