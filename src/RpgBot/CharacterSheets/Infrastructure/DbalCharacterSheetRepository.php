@@ -153,6 +153,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                 function (array $row) {
                     return Character::create(
                         CharacterId::fromString($row['id']),
+                        $row['workspace'],
                         $row['name'],
                         $row['level'],
                         $row['experience']
@@ -171,6 +172,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             'characters',
             [
                 'id' => $character->getCharacterId(),
+                'workspace' => $character->getWorkspace(),
                 'name' => $character->getName(),
                 'level' => $character->getLevel(),
                 'experience' => $character->getExperience(),
@@ -181,6 +183,4 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
     public function storeProperty(Character $character, BasePropertyInterface $property): void
     {
     }
-
-
 }

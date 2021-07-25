@@ -6,6 +6,7 @@ namespace RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidWorkspaceException;
 
 /**
  * Aggregate root
@@ -15,6 +16,8 @@ class Character
     private const MIN_EXPERIENCE = 0;
 
     private CharacterId $characterId;
+
+    private string $workspace;
 
     private string $name;
 
@@ -35,16 +38,9 @@ class Character
      */
     private array $skills;
 
-    /**
-     * @param CharacterId $characterId
-     * @param string $name
-     * @param int $experience
-     * @param Skill[] $skills
-     * @param Achievement[] $achievements
-     * @param Attribute[] $attributes
-     */
     private function __construct(
         CharacterId $characterId,
+        string $workspace,
         string $name,
         int $experience = 0,
         array $skills = [],
@@ -52,6 +48,7 @@ class Character
         array $attributes = [],
     ) {
         $this->characterId = $characterId;
+        $this->workspace = $workspace;
         $this->name = $name;
         $this->experience = $experience;
         $this->skills = $skills;
@@ -70,12 +67,17 @@ class Character
      */
     public static function create(
         CharacterId $characterId,
+        string $workspace,
         string $name,
         int $experience = 0,
         array $skills = [],
         array $achievements = [],
         array $attributes = [],
     ): self {
+        if ('' === $workspace) {
+            throw new InvalidWorkspaceException("A workspace cannot be empty");
+        }
+
         // if name is already taken, we should check later
         if ('' === $name) {
             throw new InvalidNameException("A character needs a name");
@@ -83,18 +85,21 @@ class Character
 
         if (self::MIN_EXPERIENCE > $experience) {
             throw new InvalidExperienceException(
-                sprintf("The minimum exterience is %s", self::MIN_EXPERIENCE)
+                sprintf("The minimum experience is %s", self::MIN_EXPERIENCE)
             );
         }
-        // experience will translate to level
-        $intialLevel = 1;
 
-        return new self($characterId, $name, $experience, $skills, $achievements, $attributes);
+        return new self($characterId, $workspace, $name, $experience, $skills, $achievements, $attributes);
     }
 
     public function getCharacterId(): string
     {
         return $this->characterId->toString();
+    }
+
+    public function getWorkspace(): string
+    {
+        return $this->workspace;
     }
 
     public function getName(): string
