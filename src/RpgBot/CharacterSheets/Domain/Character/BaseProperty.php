@@ -14,14 +14,10 @@ class BaseProperty implements BasePropertyInterface
     private const MAX_LEVEL = 99;
     private const MIN_LEVEL = 0;
 
-    private string $name;
-
-    private int $level;
-
-    private function __construct(string $name, int $level)
-    {
-        $this->name = $name;
-        $this->level = $level;
+    private function __construct(
+        private string $name,
+        private int $level
+    ) {
     }
 
     public static function create(string $name, int $level = 0): BasePropertyInterface
