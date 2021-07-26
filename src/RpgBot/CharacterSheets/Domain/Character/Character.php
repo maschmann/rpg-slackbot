@@ -25,17 +25,17 @@ class Character
     private int $experience;
 
     /**
-     * @var Achievement[]
+     * @var BasePropertyInterface[]
      */
     private array $achievements;
 
     /**
-     * @var Attribute[]
+     * @var BasePropertyInterface[]
      */
     private array $attributes;
 
     /**
-     * @var Skill[]
+     * @var BasePropertyInterface[]
      */
     private array $skills;
 
@@ -46,9 +46,9 @@ class Character
      * @param string $workspace
      * @param string $name
      * @param int $experience
-     * @param Skill[] $skills
-     * @param Achievement[] $achievements
-     * @param Attribute[] $attributes
+     * @param BasePropertyInterface[] $skills
+     * @param BasePropertyInterface[] $achievements
+     * @param BasePropertyInterface[] $attributes
      */
     private function __construct(
         CharacterId $characterId,
