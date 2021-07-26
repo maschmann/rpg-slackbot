@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Domain\Character;
 
+use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidWorkspaceException;
@@ -72,9 +73,9 @@ class Character
      * @param string $workspace
      * @param string $name
      * @param int $experience
-     * @param Skill[] $skills
-     * @param Achievement[] $achievements
-     * @param Attribute[] $attributes
+     * @param BasePropertyInterface[] $skills
+     * @param BasePropertyInterface[] $achievements
+     * @param BasePropertyInterface[] $attributes
      * @return self
      */
     public static function create(

@@ -107,13 +107,13 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                         );
                         break;
                     case Skill::class:
-                        $attributes[] = Skill::create(
+                        $skills[] = Skill::create(
                             $property['name'],
                             $property['level']
                         );
                         break;
                     case Achievement::class:
-                        $attributes[] = Achievement::create(
+                        $achievements[] = Achievement::create(
                             $property['name'],
                             $property['level']
                         );
@@ -122,8 +122,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             }
         }
 
-        // @TODO add character properties in a sensible manner
-        $character = Character::create(
+        return Character::create(
             CharacterId::fromString($characterRaw['id']),
             $characterRaw['workspace'],
             $characterRaw['name'],
@@ -132,8 +131,6 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             $achievements,
             $attributes
         );
-
-        return $character;
     }
 
     /**
