@@ -132,7 +132,7 @@ class Character
     }
 
     /**
-     * @return Skill[]
+     * @return BasePropertyInterface[]
      */
     public function getSkills(): array
     {
@@ -140,7 +140,7 @@ class Character
     }
 
     /**
-     * @return Attribute[]
+     * @return BasePropertyInterface[]
      */
     public function getAttributes(): array
     {
@@ -148,7 +148,7 @@ class Character
     }
 
     /**
-     * @return Achievement[]
+     * @return BasePropertyInterface[]
      */
     public function getAchievements(): array
     {
