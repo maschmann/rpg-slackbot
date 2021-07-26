@@ -87,9 +87,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         );
 
         if (false === $characterRaw) {
-            throw new CharacterNotFoundException(
-                sprintf("The character with name %s could not be found", $name)
-            );
+            return null;
         }
 
         $properties =  $this->connection->fetchAssociative(
