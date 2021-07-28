@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace RpgBot\CharacterSheets\Application\Query;
+namespace RpgBot\CharacterSheets\Application\Query\Dto;
 
-class AchievementDto
+use RpgBot\CharacterSheets\Application\Query\Contract\PropertyDtoInterface;
+
+class AttributeDto implements PropertyDtoInterface
 {
     public function __construct(
         private string $name,

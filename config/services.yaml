@@ -33,6 +33,12 @@ services:
         exclude:
             - '../src/RpgBot/**/Exception'
             - '../src/RpgBot/**/Contract'
+            - '../src/RpgBot/**/Dto'
 
-    #RpgBot\CharacterSheet\Application\Command\Character\CharacterChangeHandler:
-    #    tags: [messenger.message_handler]
+    RpgBot\CharacterSheets\Application\Command\CharacterSheet\CharacterSheetCreationHandler:
+        tags: [messenger.message_handler]
+
+    RpgBot\CharacterSheets\Application\Command\CharacterSheet\CharacterSetPropertyHandler:
+        tags: [messenger.message_handler]
+
+    RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface: '@RpgBot\CharacterSheets\Infrastructure\DbalCharacterSheetRepository'

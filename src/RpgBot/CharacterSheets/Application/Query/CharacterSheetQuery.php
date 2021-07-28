@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Application\Query;
 
+use RpgBot\CharacterSheets\Application\Query\Contract\PropertyDtoInterface;
+use RpgBot\CharacterSheets\Application\Query\Dto\AchievementDto;
+use RpgBot\CharacterSheets\Application\Query\Dto\AttributeDto;
+use RpgBot\CharacterSheets\Application\Query\Dto\CharacterDto;
+use RpgBot\CharacterSheets\Application\Query\Dto\SkillDto;
 use RpgBot\CharacterSheets\Domain\Character\Character;
 use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
@@ -53,7 +58,7 @@ class CharacterSheetQuery
     /**
      * @param BasePropertyInterface[] $properties
      * @param string $class
-     * @return SkillDto[]|AchievementDto[]|AttributeDto[]
+     * @return PropertyDtoInterface[]
      */
     private function convertProperties(array $properties, string $class): array
     {

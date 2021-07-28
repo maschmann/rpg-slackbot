@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace RpgBot\CharacterSheets\Application\Query;
+namespace RpgBot\CharacterSheets\Application\Query\Dto;
 
 class CharacterDto
 {
