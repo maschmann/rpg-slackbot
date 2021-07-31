@@ -14,7 +14,7 @@ final class Version20210728201831 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create property_definitions table with data';
+        return 'Create property_definitions';
     }
 
     public function up(Schema $schema): void
@@ -27,7 +27,7 @@ final class Version20210728201831 extends AbstractMigration
         ');
 
         $this->addSql('
-            CREATE INDEX character_name ON property_definitions(name, type)
+            CREATE INDEX property_type ON property_definitions(type)
         ');
     }
 

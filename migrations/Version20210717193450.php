@@ -26,16 +26,13 @@ final class Version20210717193450 extends AbstractMigration
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 workspace VARCHAR(255),
                 name VARCHAR(255),
-                experience INT
-              )
+                experience INT,
+                CONSTRAINT character_name_unique UNIQUE characters(name)
+            )
         ');
 
         $this->addSql('
             CREATE INDEX character_name ON characters(name)
-        ');
-
-        $this->addSql('
-            CONSTRAINT constraint_character_name UNIQUE characters(name)
         ');
 
         $this->addSql('
