@@ -39,7 +39,9 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
         "phpstan/phpstan": "^0.12.65",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "symfony/stopwatch": "^5.3",
+        "symfony/web-profiler-bundle": "^5.3"
     },
     "config": {
         "optimize-autoloader": true,

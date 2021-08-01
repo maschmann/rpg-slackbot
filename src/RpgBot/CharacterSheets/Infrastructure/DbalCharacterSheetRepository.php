@@ -82,7 +82,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $characterRaw = $this->connection->fetchAssociative(
             'SELECT id, workspace, name, experience FROM characters WHERE name = ?',
             [
-                'name' => $name,
+                $name,
             ]
         );
 
@@ -93,7 +93,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $properties =  $this->connection->fetchAssociative(
             'SELECT name, level, type FROM properties WHERE id = ?',
             [
-                'id' => $characterRaw['id'],
+                $characterRaw['id'],
             ]
         );
 

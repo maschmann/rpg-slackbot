@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use JoliCode\Slack\ClientFactory;
+use JoliCode\Slack\Exception\SlackErrorResponse;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
@@ -39,7 +41,7 @@ class CharacterController
     #[Route('', name: 'character_list', methods: ['GET'])]
     public function list(): JsonResponse
     {
-        return new JsonResponse();
+        return new JsonResponse([]);
     }
 
     /**
