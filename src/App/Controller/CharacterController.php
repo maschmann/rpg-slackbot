@@ -4,44 +4,58 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use JoliCode\Slack\ClientFactory;
-use JoliCode\Slack\Exception\SlackErrorResponse;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
+use Psr\Log\LoggerInterface;
 use RpgBot\CharacterSheets\Application\Command\CharacterSheet\CharacterSheetCreationCommand;
+use RpgBot\CharacterSheets\Application\Query\CharacterSheetQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use RpgBot\CharacterSheets\Domain\Character\Character;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('api/characters')]
+#[Route('api')]
 class CharacterController
 {
     public function __construct(
-        private MessageBusInterface $queryBus,
+        private CharacterSheetQuery $sheetQuery,
         private MessageBusInterface $commandBus,
         private SerializerInterface $serializer,
+        private LoggerInterface $logger,
     ) {
     }
 
     /**
      * @OA\Response(
      *     response=200,
-     *     description="Returns a list of characters",
-     *     @OA\JsonContent(
-     *        type="array",
-     *        @OA\Items(ref=@Model(type=Character::class, groups={"full"}))
-     *     )
+     *     description="Returns a list of characters"
      * )
      * @OA\Tag(name="characters")
      * @Security(name="Bearer")
      */
-    #[Route('', name: 'character_list', methods: ['GET'])]
-    public function list(): JsonResponse
+    #[Route('/characters', name: 'character_list', methods: ['POST'])]
+    public function list(Request $request): Response
     {
-        return new JsonResponse([]);
+        $this->logger->debug(print_r($request->request->get('text'), true));
+        $characterList = $this->sheetQuery->getAll();
+
+        $characters = [];
+        foreach ($characterList as $item) {
+            $characters[] = $item->getName() . " " . $item->getLevel();
+        }
+
+        if (0 === count($characters)) {
+            $characters[] = "No characters found";
+        }
+
+        //@todo think of actually adding templates and rendering here, even though it's just text
+        return new Response(
+            implode("\n", $characters) . " " . $request->request->get('text')
+        );
     }
 
     /**
@@ -57,13 +71,26 @@ class CharacterController
      *     description="The name of the character",
      *     @OA\Schema(type="string")
      * )
-     * @OA\Tag(name="characters")
+     * @OA\Tag(name="character")
      * @Security(name="Bearer")
      */
-    #[Route('/{name}', name: 'character_by_name', requirements: ['page' => '\w+'], methods: ['GET'])]
+    #[Route('/character', name: 'character_by_name', methods: ['POST'])]
     public function byName(string $name): JsonResponse
     {
-        return new JsonResponse();
+        // \<\@(?P<user_id>[a-zA-Z]+)\|(?P<user_name>.+)\>(?P<args>.+)
+
+        $user = $this->sheetQuery->getByName($name);
+        if (empty($user)) {
+            return new JsonResponse(
+                ["status" => 'User not found']
+            );
+        }
+
+        return new JsonResponse(
+            [
+                'data' => $this->serializer->serialize($user, 'array')
+            ]
+        );
     }
 
     /**

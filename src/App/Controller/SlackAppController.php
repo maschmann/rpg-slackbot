@@ -27,7 +27,7 @@ class SlackAppController
     public function __construct(
         private LoggerInterface $logger,
         private Slack $slack,
-        private CharacterSheetQuery $characterSheetQuery,
+        private CharacterSheetQuery $characterSheetQuery, // not a 100% sure if a message bus wouldn't be better
         private MessageBusInterface $commandBus,
         private SerializerInterface $serializer,
     ) {

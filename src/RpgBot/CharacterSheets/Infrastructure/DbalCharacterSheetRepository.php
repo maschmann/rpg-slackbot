@@ -33,7 +33,6 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $this->connection->update(
             'characters',
             [
-                'level' => $character->getLevel(),
                 'experience' => $character->getExperience(),
             ],
             [
@@ -141,7 +140,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $characterList = [];
 
         $characterListRaw = $this->connection->fetchAssociative(
-            'SELECT id, name, level, experience FROM characters'
+            'SELECT id, name, experience FROM characters'
         );
 
         if (false !== $characterListRaw) {
@@ -151,7 +150,6 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                         CharacterId::fromString($row['id']),
                         $row['workspace'],
                         $row['name'],
-                        $row['level'],
                         $row['experience']
                     );
                 },
@@ -170,7 +168,6 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                 'id' => $character->getCharacterId(),
                 'workspace' => $character->getWorkspace(),
                 'name' => $character->getName(),
-                'level' => $character->getLevel(),
                 'experience' => $character->getExperience(),
             ]
         );
