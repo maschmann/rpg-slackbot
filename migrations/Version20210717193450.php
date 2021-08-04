@@ -26,13 +26,19 @@ final class Version20210717193450 extends AbstractMigration
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 workspace VARCHAR(255),
                 name VARCHAR(255),
+                slack_id VARCHAR (255),
                 experience INT,
-                CONSTRAINT character_name_unique UNIQUE characters(name)
+                CONSTRAINT character_name_unique UNIQUE characters(name),
+                CONSTRAINT character_slack_id_unique UNIQUE characters(slack_id)
             )
         ');
 
         $this->addSql('
             CREATE INDEX character_name ON characters(name)
+        ');
+
+        $this->addSql('
+            CREATE INDEX character_slack_id ON characters(slack_id)
         ');
 
         $this->addSql('

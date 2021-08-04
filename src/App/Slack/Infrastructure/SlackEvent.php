@@ -13,7 +13,7 @@ use App\Slack\Infrastructure\Exception\InvalidBodyException;
 use JoliCode\Slack\Client;
 use JoliCode\Slack\ClientFactory;
 
-class Slack
+class SlackEvent
 {
     public const TYPE_APP_MENTION = 'app_mention';
 

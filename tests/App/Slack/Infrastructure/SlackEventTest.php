@@ -9,11 +9,12 @@ use App\Slack\Dto\UserEventDto;
 use App\Slack\Infrastructure\Exception\InvalidActionException;
 use App\Slack\Infrastructure\Exception\InvalidBodyException;
 use App\Slack\Infrastructure\Exception\InvalidTypeException;
-use App\Slack\Infrastructure\Slack;
+use App\Slack\Infrastructure\SlackEvent;
 use JoliCode\Slack\Client;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class SlackTest extends TestCase
+class SlackEventTest extends TestCase
 {
     private string $bodyRaw = <<< EOF
 {
@@ -74,7 +75,7 @@ EOF;
 
     public function testCreatesAClient(): void
     {
-        $slack = new Slack('some_token');
+        $slack = new SlackEvent('some_token');
         $client = $slack->client();
 
         $this->assertInstanceOf(Client::class, $client);
@@ -82,7 +83,7 @@ EOF;
 
     public function testCanHandleHandshake(): void
     {
-        $slack = new Slack('some_token');
+        $slack = new SlackEvent('some_token');
         $handshakeRaw = <<< EOF
 {
     "token": "Jhj5dZrVaK7ZwHHjRyZWjbDl",
@@ -100,17 +101,17 @@ EOF;
 
     public function testCanExtractEventData(): void
     {
-        $slack = new Slack('some_token');
+        $slack = new SlackEvent('some_token');
         $event = $slack->handleEvent($this->bodyRaw, $this->getClientMock());
         $this->assertInstanceOf(UserEventDto::class, $event);
-        $this->assertSame(Slack::TYPE_APP_MENTION, $event->getType());
-        $this->assertSame(Slack::ACTION_LIST_CHARACTERS, $event->getAction());
+        $this->assertSame(SlackEvent::TYPE_APP_MENTION, $event->getType());
+        $this->assertSame(SlackEvent::ACTION_LIST_CHARACTERS, $event->getAction());
     }
 
     public function testThrowsInvalidBodyException(): void
     {
         $this->expectException(InvalidBodyException::class);
-        $slack = new Slack('some_token');
+        $slack = new SlackEvent('some_token');
         $slack->handleEvent('{}', $this->getClientMock());
     }
 
@@ -130,7 +131,7 @@ EOF;
 }
 EOF;
         $this->expectException(InvalidTypeException::class);
-        $slack = new Slack('some_token');
+        $slack = new SlackEvent('some_token');
         $slack->handleEvent($body, $this->getClientMock());
     }
 
@@ -151,11 +152,11 @@ EOF;
 EOF;
 
         $this->expectException(InvalidActionException::class);
-        $slack = new Slack('some_token');
+        $slack = new SlackEvent('some_token');
         $slack->handleEvent($body, $this->getClientMock());
     }
 
-    private function getClientMock()
+    private function getClientMock(): MockObject
     {
         return $this->getMockBuilder(Client::class)
             ->disableOriginalConstructor()

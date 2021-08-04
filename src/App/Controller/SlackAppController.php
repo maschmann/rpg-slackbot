@@ -8,7 +8,7 @@ use App\Slack\Dto\HandshakeEventDto;
 use App\Slack\Dto\UserEventDto;
 use App\Slack\Infrastructure\Exception\InvalidActionException;
 use App\Slack\Infrastructure\Exception\InvalidTypeException;
-use App\Slack\Infrastructure\Slack;
+use App\Slack\Infrastructure\SlackEvent;
 use JoliCode\Slack\Exception\SlackErrorResponse;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -26,7 +26,7 @@ class SlackAppController
 {
     public function __construct(
         private LoggerInterface $logger,
-        private Slack $slack,
+        private SlackEvent $slack,
         private CharacterSheetQuery $characterSheetQuery, // not a 100% sure if a message bus wouldn't be better
         private MessageBusInterface $commandBus,
         private SerializerInterface $serializer,
@@ -66,10 +66,10 @@ class SlackAppController
                 try {
                     // no default action needed, will throw an exception
                     switch ($eventDto->getAction()) {
-                        case Slack::ACTION_LIST_CHARACTERS:
+                        case SlackEvent::ACTION_LIST_CHARACTERS:
                             $characterList = $this->characterSheetQuery->getAll();
                             break;
-                        case Slack::ACTION_GET_CHARACTER:
+                        case SlackEvent::ACTION_GET_CHARACTER:
                             $character = $this->characterSheetQuery->getByName($eventDto->getUserName());
                             if (null === $character) {
                                 $payload['message'] = "You don't have a character yet";

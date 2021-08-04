@@ -1,0 +1,7 @@
+{% if character %}
+    name: {{ character.name }}
+    level: {{ character.level }}
+    XP: {{ character.experience }}
+{% else %}
+    Character not found!
+{% endif %}

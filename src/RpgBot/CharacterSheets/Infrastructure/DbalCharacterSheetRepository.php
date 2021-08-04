@@ -11,7 +11,6 @@ use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Character;
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
 use Doctrine\DBAL\Connection;
-use RpgBot\CharacterSheets\Domain\Character\Exception\CharacterNotFoundException;
 use RpgBot\CharacterSheets\Domain\Character\Skill;
 
 class DbalCharacterSheetRepository implements CharacterRepositoryInterface
