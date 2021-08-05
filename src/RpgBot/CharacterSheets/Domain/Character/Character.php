@@ -16,56 +16,28 @@ class Character
 {
     private const MIN_EXPERIENCE = 0;
 
-    private CharacterId $characterId;
-
-    private string $workspace;
-
-    private string $name;
-
-    private int $experience;
-
-    /**
-     * @var BasePropertyInterface[]
-     */
-    private array $achievements;
-
-    /**
-     * @var BasePropertyInterface[]
-     */
-    private array $attributes;
-
-    /**
-     * @var BasePropertyInterface[]
-     */
-    private array $skills;
-
     /**
      * Character constructor.
      *
      * @param CharacterId $characterId
      * @param string $workspace
      * @param string $name
+     * @param string $slackId
      * @param int $experience
      * @param BasePropertyInterface[] $skills
      * @param BasePropertyInterface[] $achievements
      * @param BasePropertyInterface[] $attributes
      */
     private function __construct(
-        CharacterId $characterId,
-        string $workspace,
-        string $name,
-        int $experience = 0,
-        array $skills = [],
-        array $achievements = [],
-        array $attributes = [],
+        private CharacterId $characterId,
+        private string $workspace,
+        private string $name,
+        private string $slackId,
+        private int $experience = 0,
+        private array $skills = [],
+        private array $achievements = [],
+        private array $attributes = [],
     ) {
-        $this->characterId = $characterId;
-        $this->workspace = $workspace;
-        $this->name = $name;
-        $this->experience = $experience;
-        $this->skills = $skills;
-        $this->attributes = $attributes;
-        $this->achievements = $achievements;
     }
 
     /**
@@ -82,6 +54,7 @@ class Character
         CharacterId $characterId,
         string $workspace,
         string $name,
+        string $slackId,
         int $experience = 0,
         array $skills = [],
         array $achievements = [],
@@ -102,7 +75,7 @@ class Character
             );
         }
 
-        return new self($characterId, $workspace, $name, $experience, $skills, $achievements, $attributes);
+        return new self($characterId, $workspace, $name, $slackId, $experience, $skills, $achievements, $attributes);
     }
 
     public function getCharacterId(): string
@@ -118,6 +91,14 @@ class Character
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlackId(): string
+    {
+        return $this->slackId;
     }
 
     public function getLevel(): int

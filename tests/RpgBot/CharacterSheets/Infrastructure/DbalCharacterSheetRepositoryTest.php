@@ -24,8 +24,9 @@ class DbalCharacterSheetRepositoryTest extends TestCase
         $characterId = CharacterId::generate();
         $name = 'oswald';
         $workspace = 'slackspace';
+        $slackId = 'XXXXXXX';
 
-        $character = Character::create($characterId, $workspace, $name);
+        $character = Character::create($characterId, $workspace, $name, $slackId);
 
         $sheetRepository = new DbalCharacterSheetRepository($connection);
         $sheetRepository->store($character);

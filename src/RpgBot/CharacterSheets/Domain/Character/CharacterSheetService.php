@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
-use RpgBot\CharacterSheets\Domain\Character\Exception\CharacterNotFoundException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 
 class CharacterSheetService

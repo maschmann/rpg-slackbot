@@ -11,6 +11,7 @@ class CharacterSheetCreationCommand implements CommandInterface
     public function __construct(
         private string $workspace,
         private string $name,
+        private string $slackId,
     ) {
     }
 
@@ -22,5 +23,13 @@ class CharacterSheetCreationCommand implements CommandInterface
     public function getWorkspace(): string
     {
         return $this->workspace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlackId(): string
+    {
+        return $this->slackId;
     }
 }

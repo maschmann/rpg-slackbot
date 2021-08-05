@@ -17,7 +17,7 @@ class CharacterSheetServiceTest extends TestCase
     public function testCharacterCanBeStored(): void
     {
         $storage = [];
-        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!');
+        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
             ->getMock();
@@ -39,7 +39,7 @@ class CharacterSheetServiceTest extends TestCase
     public function testCharacterCanBeCreated(): void
     {
         $storage = [];
-        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!');
+        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
             ->getMock();
@@ -61,7 +61,7 @@ class CharacterSheetServiceTest extends TestCase
     public function testCharacterNameAlreadyTaken(): void
     {
         $this->expectException(InvalidNameException::class);
-        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!');
+        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
             ->getMock();

@@ -24,6 +24,7 @@ class CharacterSheetCreationHandler implements HandlerInterface
             CharacterId::generate(),
             $command->getWorkspace(),
             $command->getName(),
+            $command->getSlackId(),
         );
 
         try {

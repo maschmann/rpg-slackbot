@@ -18,8 +18,9 @@ class CharacterTest extends TestCase
         $characterId = CharacterId::generate();
         $name = 'oswald';
         $workspace = 'slackspace';
+        $slackId = 'XXXXXXX';
 
-        $character = Character::create($characterId, $workspace, $name);
+        $character = Character::create($characterId, $workspace, $name, $slackId);
 
         $this->assertSame($characterId->toString(), $character->getCharacterId());
         $this->assertSame($workspace, $character->getWorkspace());
@@ -32,41 +33,42 @@ class CharacterTest extends TestCase
         $characterId = CharacterId::generate();
         $name = 'oswald';
         $workspace = 'slackspace';
+        $slackId = 'XXXXXXX';
 
-        $character = Character::create($characterId, $workspace, $name, 0);
+        $character = Character::create($characterId, $workspace, $name, $slackId, 0);
         $this->assertSame(1, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, 49);
+        $character = Character::create($characterId, $workspace, $name, $slackId, 49);
         $this->assertSame(1, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, 50);
+        $character = Character::create($characterId, $workspace, $name, $slackId, 50);
         $this->assertSame(2, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, 51);
+        $character = Character::create($characterId, $workspace, $name, $slackId, 51);
         $this->assertSame(2, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, 150);
+        $character = Character::create($characterId, $workspace, $name, $slackId, 150);
         $this->assertSame(3, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, 5000);
+        $character = Character::create($characterId, $workspace, $name, $slackId, 5000);
         $this->assertSame(14, $character->getLevel());
     }
 
     public function testCharacterWorkspaceEmptyException(): void
     {
         $this->expectException(InvalidWorkspaceException::class);
-        Character::create(CharacterId::generate(), '', 'name', 5);
+        Character::create(CharacterId::generate(), '', 'name', 'XXXXXXX', 5);
     }
 
     public function testCharacterNameEmptyException(): void
     {
         $this->expectException(InvalidNameException::class);
-        Character::create(CharacterId::generate(), 'xy', '', 5);
+        Character::create(CharacterId::generate(), 'xy', '', 'XXXXXXX', 5);
     }
 
     public function testInvalidExperienceException(): void
     {
         $this->expectException(InvalidExperienceException::class);
-        Character::create(CharacterId::generate(), 'xy', 'test', -5);
+        Character::create(CharacterId::generate(), 'xy', 'test', 'XXXXXXX', -5);
     }
 }

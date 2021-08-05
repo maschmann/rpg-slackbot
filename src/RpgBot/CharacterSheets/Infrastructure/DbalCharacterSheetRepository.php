@@ -78,7 +78,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $attributes = [];
 
         $characterRaw = $this->connection->fetchAssociative(
-            'SELECT id, workspace, name, experience FROM characters WHERE name = ?',
+            'SELECT id, workspace, name, slack_id, experience FROM characters WHERE name = ?',
             [
                 $name,
             ]
@@ -124,6 +124,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             CharacterId::fromString($characterRaw['id']),
             $characterRaw['workspace'],
             $characterRaw['name'],
+            $characterRaw['slack_id'],
             $characterRaw['experience'],
             $skills,
             $achievements,
@@ -149,6 +150,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                         CharacterId::fromString($row['id']),
                         $row['workspace'],
                         $row['name'],
+                        $row['slack_id'],
                         $row['experience']
                     );
                 },
@@ -167,6 +169,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                 'id' => $character->getCharacterId(),
                 'workspace' => $character->getWorkspace(),
                 'name' => $character->getName(),
+                'slack_id' => $character->getSlackId(),
                 'experience' => $character->getExperience(),
             ]
         );
