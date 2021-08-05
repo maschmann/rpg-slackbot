@@ -9,7 +9,7 @@ use RpgBot\CharacterSheets\Application\Command\Contract\HandlerInterface;
 use RpgBot\CharacterSheets\Domain\Character\Character;
 use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\CharacterSheetService;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\UserAlreadyExistsException;
 
 class CharacterSheetCreationHandler implements HandlerInterface
 {
@@ -28,8 +28,12 @@ class CharacterSheetCreationHandler implements HandlerInterface
         );
 
         try {
-            $this->sheetService->create($character);
-        } catch (InvalidNameException $exception) {
+            try {
+                $this->sheetService->create($character);
+            } catch (UserAlreadyExistsException $exception) {
+                throw new \RuntimeException($exception->getMessage());
+            }
+        } catch (\DomainException $exception) { // maybe add specific handling later
             throw new \RuntimeException("The character could not be created");
         }
     }

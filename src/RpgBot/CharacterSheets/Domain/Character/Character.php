@@ -8,6 +8,8 @@ use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidWorkspaceException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\SlackIdMissingException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\UserNameMissingException;
 
 /**
  * Aggregate root
@@ -44,6 +46,7 @@ class Character
      * @param CharacterId $characterId
      * @param string $workspace
      * @param string $name
+     * @param string $slackId
      * @param int $experience
      * @param BasePropertyInterface[] $skills
      * @param BasePropertyInterface[] $achievements
@@ -64,9 +67,12 @@ class Character
             throw new InvalidWorkspaceException("A workspace cannot be empty");
         }
 
-        // if name is already taken, we should check later
         if ('' === $name) {
-            throw new InvalidNameException("A character needs a name");
+            throw new UserNameMissingException("A character needs a name");
+        }
+
+        if ('' === $slackId) {
+            throw new SlackIdMissingException("A character needs a slack id");
         }
 
         if (self::MIN_EXPERIENCE > $experience) {

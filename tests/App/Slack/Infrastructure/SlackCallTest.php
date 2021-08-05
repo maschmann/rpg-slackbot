@@ -20,7 +20,29 @@ class SlackCallTest extends TestCase
             'user_name' => 'maschmann',
             'user_id' => 'UEVVARTKR',
             'command' => '/rpg-characters',
-            'text' => '<@UEVVARTKR|maschmann> test',
+            'text' => '<@XXXXXX|DerBoese> test',
+        ];
+
+        $slackCall = new SlackCall();
+        $extractedData = $slackCall->extractCallData($sampleData);
+
+        $this->assertInstanceOf(CallDataDto::class, $extractedData);
+        // test the extracted target users
+        $this->assertSame('XXXXXX', $extractedData->getUserId());
+        $this->assertSame('DerBoese', $extractedData->getUserName());
+        $this->assertSame('test', $extractedData->getArgs());
+    }
+
+    public function testUseFallbackDataForUserAndId(): void
+    {
+        $sampleData = [
+            'team_id' => 'TEUQPLYAF',
+            'channel_id' => 'CEU62U6FJ',
+            'channel_name' => 'allgemein',
+            'user_name' => 'maschmann',
+            'user_id' => 'UEVVARTKR',
+            'command' => '/rpg-characters',
+            'text' => '',
         ];
 
         $slackCall = new SlackCall();
@@ -30,7 +52,7 @@ class SlackCallTest extends TestCase
         // test the extracted target users
         $this->assertSame('UEVVARTKR', $extractedData->getUserId());
         $this->assertSame('maschmann', $extractedData->getUserName());
-        $this->assertSame('test', $extractedData->getArgs());
+        $this->assertSame('', $extractedData->getArgs());
     }
 
     public function testFailsWhenTeamIdIsMissing(): void

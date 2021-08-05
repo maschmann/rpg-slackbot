@@ -51,11 +51,11 @@ class CharacterController extends AbstractController
         );
     }
 
-    #[Route('/show', name: 'characters_by_name', methods: ['POST'])]
-    public function byName(Request $request): Response
+    #[Route('/show', name: 'characters_by_slack_id', methods: ['POST'])]
+    public function bySlackId(Request $request): Response
     {
         $requestData = $this->slackCall->extractCallData($request->request->all());
-        $character = $this->sheetQuery->getByName($requestData->getUserName());
+        $character = $this->sheetQuery->getBySlackId($requestData->getUserId());
 
         return $this->render(
             'characters/character.html.twig',
@@ -66,14 +66,23 @@ class CharacterController extends AbstractController
     }
 
     #[Route('/create', name: 'characters_create', methods: ['POST'])]
-    public function create(Request $request): JsonResponse
+    public function create(Request $request): Response
     {
         $requestData = $this->slackCall->extractCallData($request->request->all());
 
         $this->commandBus->dispatch(
-            new CharacterSheetCreationCommand($requestData->getChannelId(), $requestData->getUserName())
+            new CharacterSheetCreationCommand(
+                $requestData->getTeamId(),
+                $requestData->getUserName(),
+                $requestData->getUserId()
+            )
         );
 
-        return new JsonResponse();
+        return $this->render(
+            'characters/create.html.twig',
+            [
+                'name' => $requestData->getUserName(),
+            ]
+        );
     }
 }

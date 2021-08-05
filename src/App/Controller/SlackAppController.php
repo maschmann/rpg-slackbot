@@ -70,7 +70,7 @@ class SlackAppController
                             $characterList = $this->characterSheetQuery->getAll();
                             break;
                         case SlackEvent::ACTION_GET_CHARACTER:
-                            $character = $this->characterSheetQuery->getByName($eventDto->getUserName());
+                            $character = $this->characterSheetQuery->getBySlackId($eventDto->getUser());
                             if (null === $character) {
                                 $payload['message'] = "You don't have a character yet";
                             }

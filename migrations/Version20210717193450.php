@@ -28,7 +28,6 @@ final class Version20210717193450 extends AbstractMigration
                 name VARCHAR(255),
                 slack_id VARCHAR (255),
                 experience INT,
-                CONSTRAINT character_name_unique UNIQUE characters(name),
                 CONSTRAINT character_slack_id_unique UNIQUE characters(slack_id)
             )
         ');

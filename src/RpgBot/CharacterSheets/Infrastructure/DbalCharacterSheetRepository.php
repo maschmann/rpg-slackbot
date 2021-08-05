@@ -67,20 +67,20 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
     }
 
     /**
-     * @param string $name
+     * @param string $slackId
      * @return Character|null
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getByName(string $name): ?Character
+    public function getBySlackId(string $slackId): ?Character
     {
         $skills = [];
         $achievements = [];
         $attributes = [];
 
         $characterRaw = $this->connection->fetchAssociative(
-            'SELECT id, workspace, name, slack_id, experience FROM characters WHERE name = ?',
+            'SELECT id, workspace, name, slack_id, experience FROM characters WHERE slack_id = ?',
             [
-                $name,
+                $slackId,
             ]
         );
 
@@ -89,7 +89,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         }
 
         $properties =  $this->connection->fetchAssociative(
-            'SELECT name, level, type FROM properties WHERE id = ?',
+            'SELECT name, level, type FROM properties WHERE character_id = ?',
             [
                 $characterRaw['id'],
             ]
@@ -101,19 +101,19 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                     case Attribute::class:
                         $attributes[] = Attribute::create(
                             $property['name'],
-                            $property['level']
+                            (int)$property['level']
                         );
                         break;
                     case Skill::class:
                         $skills[] = Skill::create(
                             $property['name'],
-                            $property['level']
+                            (int)$property['level']
                         );
                         break;
                     case Achievement::class:
                         $achievements[] = Achievement::create(
                             $property['name'],
-                            $property['level']
+                            (int)$property['level']
                         );
                         break;
                 }
@@ -125,7 +125,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             $characterRaw['workspace'],
             $characterRaw['name'],
             $characterRaw['slack_id'],
-            $characterRaw['experience'],
+            (int)$characterRaw['experience'],
             $skills,
             $achievements,
             $attributes
@@ -151,7 +151,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                         $row['workspace'],
                         $row['name'],
                         $row['slack_id'],
-                        $row['experience']
+                        (int)$row['experience']
                     );
                 },
                 $characterListRaw

@@ -8,8 +8,9 @@ use RpgBot\CharacterSheets\Domain\Character\Character;
 use PHPUnit\Framework\TestCase;
 use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidWorkspaceException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\SlackIdMissingException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\UserNameMissingException;
 
 class CharacterTest extends TestCase
 {
@@ -60,9 +61,15 @@ class CharacterTest extends TestCase
         Character::create(CharacterId::generate(), '', 'name', 'XXXXXXX', 5);
     }
 
+    public function testCharacterHasNoSlackIdException(): void
+    {
+        $this->expectException(SlackIdMissingException::class);
+        Character::create(CharacterId::generate(), 'lalala', 'name', '', 5);
+    }
+
     public function testCharacterNameEmptyException(): void
     {
-        $this->expectException(InvalidNameException::class);
+        $this->expectException(UserNameMissingException::class);
         Character::create(CharacterId::generate(), 'xy', '', 'XXXXXXX', 5);
     }
 

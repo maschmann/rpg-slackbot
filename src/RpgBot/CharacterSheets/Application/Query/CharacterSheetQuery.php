@@ -20,9 +20,9 @@ class CharacterSheetQuery
     ) {
     }
 
-    public function getByName(string $name): ?CharacterDto
+    public function getBySlackId(string $slackId): ?CharacterDto
     {
-        $character = $this->repository->getByName($name);
+        $character = $this->repository->getBySlackId($slackId);
         if ($character) {
             return new CharacterDto(
                 $character->getName(),

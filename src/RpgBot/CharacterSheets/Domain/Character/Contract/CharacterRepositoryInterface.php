@@ -13,7 +13,7 @@ interface CharacterRepositoryInterface
     public function storeProperty(Character $character, BasePropertyInterface $property): void;
     public function addProperty(Character $character, BasePropertyInterface $property): void;
     public function delete(Character $character): void;
-    public function getByName(string $name): ?Character;
+    public function getBySlackId(string $slackId): ?Character;
 
     /**
      * @return Character[]

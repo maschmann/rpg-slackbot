@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\UserAlreadyExistsException;
 
 class CharacterSheetService
 {
@@ -16,7 +16,7 @@ class CharacterSheetService
 
     public function create(Character $character): void
     {
-        $this->checkIfNameIsAlreadyTaken($character->getName());
+        $this->checkIfUserAlreadyExists($character->getSlackId(), $character->getName());
         $this->characterRepository->create($character);
     }
 
@@ -33,11 +33,11 @@ class CharacterSheetService
         return $this->characterRepository->getAll();
     }
 
-    private function checkIfNameIsAlreadyTaken(string $name): void
+    private function checkIfUserAlreadyExists(string $slackId, string $name): void
     {
-        if (null !== $this->characterRepository->getByName($name)) {
-            throw new InvalidNameException(
-                sprintf("The name %s is already taken!", $name)
+        if (null !== $this->characterRepository->getBySlackId($slackId)) {
+            throw new UserAlreadyExistsException(
+                sprintf("The user with name %s and id %s already exists!", $name, $slackId)
             );
         };
     }

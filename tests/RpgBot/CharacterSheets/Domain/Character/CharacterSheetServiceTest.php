@@ -9,8 +9,7 @@ use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\CharacterSheetService;
 use PHPUnit\Framework\TestCase;
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
-use RpgBot\CharacterSheets\Domain\Character\Exception\CharacterNotFoundException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\UserAlreadyExistsException;
 
 class CharacterSheetServiceTest extends TestCase
 {
@@ -60,7 +59,7 @@ class CharacterSheetServiceTest extends TestCase
 
     public function testCharacterNameAlreadyTaken(): void
     {
-        $this->expectException(InvalidNameException::class);
+        $this->expectException(UserAlreadyExistsException::class);
         $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
@@ -70,7 +69,7 @@ class CharacterSheetServiceTest extends TestCase
             ->method('create');
 
         $repository->expects($this->once())
-            ->method('getByName')
+            ->method('getBySlackId')
             ->willReturn($ourCharacter);
 
         $service = new CharacterSheetService($repository);

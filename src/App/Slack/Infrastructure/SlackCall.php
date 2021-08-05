@@ -29,11 +29,11 @@ class SlackCall
         $text = $requestData['text'] ?? '';
 
         $matches = [];
-        preg_match_all('/<@(?P<user_id>[a-zA-Z]+)\|(?P<user_name>.+)>(?P<args>.+)/', $text, $matches);
+        preg_match_all('/<@(?P<user_id>[a-zA-Z]+)\|(?P<user_name>.+)>(?P<args>.+)?/', $text, $matches);
 
-        $userName = $matches['user_name'][0] ?? '';
-        $userId = $matches['user_id'][0] ?? '';
-        $args = trim($matches['args'][0]) ?? '';
+        $userName = !empty($matches['user_name'][0]) ? $matches['user_name'][0] : $callingUser;
+        $userId = !empty($matches['user_id'][0]) ? $matches['user_id'][0] : $callingUserId;
+        $args = !empty($matches['args'][0]) ? trim($matches['args'][0]) : '';
 
         return CallDataDto::create(
             $teamId,
