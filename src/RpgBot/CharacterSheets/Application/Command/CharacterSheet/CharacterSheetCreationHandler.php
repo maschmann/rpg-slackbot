@@ -17,6 +17,9 @@ class CharacterSheetCreationHandler implements HandlerInterface
     ) {
     }
 
+    /**
+     * @param CharacterSheetCreationCommand $command
+     */
     public function __invoke(CommandInterface $command): void
     {
         $character = Character::create(

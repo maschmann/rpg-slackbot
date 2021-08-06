@@ -6,7 +6,6 @@ namespace RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\IdMissingException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\UserNameMissingException;
 

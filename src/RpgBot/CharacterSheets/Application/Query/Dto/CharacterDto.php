@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace RpgBot\CharacterSheets\Application\Query\Dto;
 
+use RpgBot\CharacterSheets\Application\Query\Contract\PropertyDtoInterface;
+
 class CharacterDto
 {
     /**
      * @param string $name
      * @param int $level
      * @param int $experience
-     * @param SkillDto[] $skills
-     * @param AchievementDto[] $achievements
-     * @param AttributeDto[] $attributes
+     * @param PropertyDtoInterface[] $skills
+     * @param PropertyDtoInterface[] $achievements
+     * @param PropertyDtoInterface[] $attributes
      */
     public function __construct(
         private string $name,
@@ -40,7 +42,7 @@ class CharacterDto
     }
 
     /**
-     * @return SkillDto[]
+     * @return PropertyDtoInterface[]
      */
     public function getSkills(): array
     {
@@ -48,7 +50,7 @@ class CharacterDto
     }
 
     /**
-     * @return AttributeDto[]
+     * @return PropertyDtoInterface[]
      */
     public function getAttributes(): array
     {
@@ -56,7 +58,7 @@ class CharacterDto
     }
 
     /**
-     * @return AchievementDto[]
+     * @return PropertyDtoInterface[]
      */
     public function getAchievements(): array
     {

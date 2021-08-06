@@ -145,8 +145,14 @@ class SlackEvent
     private function getUserName(Client $client, string $userId): string
     {
         $userName = '';
+        /**
+         * @var \JoliCode\Slack\Api\Model\UsersInfoGetResponse200 $user
+         */
         $user = $client->usersInfo(['user' => $userId]);
         if (null !== $user) {
+            /**
+             * @var \JoliCode\Slack\Api\Model\ObjsUser $userObj
+             */
             $userObj = $user->getUser();
             if (null !== $userObj) {
                 $userName = (string)$userObj->getName();
