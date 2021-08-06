@@ -8,7 +8,6 @@ class CharacterDto
 {
     /**
      * @param string $name
-     * @param string $slackId
      * @param int $level
      * @param int $experience
      * @param SkillDto[] $skills
@@ -17,7 +16,6 @@ class CharacterDto
      */
     public function __construct(
         private string $name,
-        private string $slackId,
         private int $level,
         private int $experience,
         private array $skills,
@@ -29,11 +27,6 @@ class CharacterDto
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getSlackId(): string
-    {
-        return $this->slackId;
     }
 
     public function getLevel(): int

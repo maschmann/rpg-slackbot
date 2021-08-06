@@ -11,7 +11,7 @@ class UserEventDto implements EventDtoInterface
     private function __construct(
         private string $workspace,
         private string $channel,
-        private string $user,
+        private string $userId,
         private string $userName,
         private string $type,
         private string $action,
@@ -21,7 +21,7 @@ class UserEventDto implements EventDtoInterface
     public static function create(
         string $workspace,
         string $channel,
-        string $user,
+        string $userId,
         string $userName,
         string $type,
         string $action,
@@ -29,7 +29,7 @@ class UserEventDto implements EventDtoInterface
         return new self(
             $workspace,
             $channel,
-            $user,
+            $userId,
             $userName,
             $type,
             $action
@@ -55,9 +55,14 @@ class UserEventDto implements EventDtoInterface
     /**
      * @return string
      */
-    public function getUser(): string
+    public function getUserId(): string
     {
-        return $this->user;
+        return $this->userId;
+    }
+
+    public function getId(): string
+    {
+        return $this->userId . "_" . $this->workspace;
     }
 
     /**

@@ -6,7 +6,6 @@ namespace Tests\RpgBot\CharacterSheets\Infrastructure;
 
 use Doctrine\DBAL\Connection;
 use RpgBot\CharacterSheets\Domain\Character\Character;
-use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Infrastructure\DbalCharacterSheetRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -21,12 +20,10 @@ class DbalCharacterSheetRepositoryTest extends TestCase
         $connection->expects($this->once())
             ->method('update');
 
-        $characterId = CharacterId::generate();
+        $characterId = 'XXXXXXX';
         $name = 'oswald';
-        $workspace = 'slackspace';
-        $slackId = 'XXXXXXX';
 
-        $character = Character::create($characterId, $workspace, $name, $slackId);
+        $character = Character::create($characterId, $name);
 
         $sheetRepository = new DbalCharacterSheetRepository($connection);
         $sheetRepository->store($character);

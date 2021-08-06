@@ -21,14 +21,12 @@ final class Version20210717193450 extends AbstractMigration
     {
         $this->addSql('
             CREATE TABLE characters (
-                id CHARACTER(36) PRIMARY KEY,
+                id CHARACTER(22) PRIMARY KEY,
                 date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                workspace VARCHAR(255),
                 name VARCHAR(255),
-                slack_id VARCHAR (255),
                 experience INT,
-                CONSTRAINT character_slack_id_unique UNIQUE characters(slack_id)
+                CONSTRAINT character_id_unique UNIQUE characters(id)
             )
         ');
 
@@ -37,12 +35,8 @@ final class Version20210717193450 extends AbstractMigration
         ');
 
         $this->addSql('
-            CREATE INDEX character_slack_id ON characters(slack_id)
-        ');
-
-        $this->addSql('
             CREATE TABLE properties (
-                character_id CHARACTER(36), 
+                character_id CHARACTER(22), 
                 date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
                 name VARCHAR(255), 

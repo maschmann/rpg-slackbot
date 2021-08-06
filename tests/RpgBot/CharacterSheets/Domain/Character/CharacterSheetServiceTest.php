@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Character;
-use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\CharacterSheetService;
 use PHPUnit\Framework\TestCase;
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
@@ -16,7 +15,7 @@ class CharacterSheetServiceTest extends TestCase
     public function testCharacterCanBeStored(): void
     {
         $storage = [];
-        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
+        $ourCharacter = Character::create('XXXXXXX', 'TheKing!');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
             ->getMock();
@@ -38,7 +37,7 @@ class CharacterSheetServiceTest extends TestCase
     public function testCharacterCanBeCreated(): void
     {
         $storage = [];
-        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
+        $ourCharacter = Character::create('XXXXXXX', 'TheKing!');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
             ->getMock();
@@ -57,10 +56,10 @@ class CharacterSheetServiceTest extends TestCase
         $this->assertSame($ourCharacter, array_pop($storage));
     }
 
-    public function testCharacterNameAlreadyTaken(): void
+    public function testCharacterIdAlreadyTaken(): void
     {
         $this->expectException(UserAlreadyExistsException::class);
-        $ourCharacter = Character::create(CharacterId::generate(), 'default', 'TheKing!', 'XXXXXXX');
+        $ourCharacter = Character::create('XXXXXXX', 'TheKing!');
 
         $repository = $this->getMockBuilder(CharacterRepositoryInterface::class)
             ->getMock();

@@ -38,24 +38,19 @@ class CharacterController extends AbstractController
         $this->logger->debug(print_r($request->request->get('text'), true));
         $characterList = $this->sheetQuery->getAll();
 
-        $characters = [];
-        foreach ($characterList as $item) {
-            $characters[] = $item->getName() . " " . $item->getLevel();
-        }
-
         return $this->render(
             'characters/list.html.twig',
             [
-                'characters' => $characters
+                'characters' => $characterList,
             ]
         );
     }
 
     #[Route('/show', name: 'characters_by_slack_id', methods: ['POST'])]
-    public function bySlackId(Request $request): Response
+    public function byId(Request $request): Response
     {
         $requestData = $this->slackCall->extractCallData($request->request->all());
-        $character = $this->sheetQuery->getBySlackId($requestData->getUserId());
+        $character = $this->sheetQuery->getBySlackId($requestData->getId());
 
         return $this->render(
             'characters/character.html.twig',
@@ -72,9 +67,8 @@ class CharacterController extends AbstractController
 
         $this->commandBus->dispatch(
             new CharacterSheetCreationCommand(
-                $requestData->getTeamId(),
-                $requestData->getUserName(),
-                $requestData->getUserId()
+                $requestData->getId(),
+                $requestData->getUserName()
             )
         );
 

@@ -7,8 +7,7 @@ namespace RpgBot\CharacterSheets\Domain\Character;
 use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidNameException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidWorkspaceException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\SlackIdMissingException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\IdMissingException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\UserNameMissingException;
 
 /**
@@ -21,20 +20,16 @@ class Character
     /**
      * Character constructor.
      *
-     * @param CharacterId $characterId
-     * @param string $workspace
+     * @param string $characterId
      * @param string $name
-     * @param string $slackId
      * @param int $experience
      * @param BasePropertyInterface[] $skills
      * @param BasePropertyInterface[] $achievements
      * @param BasePropertyInterface[] $attributes
      */
     private function __construct(
-        private CharacterId $characterId,
-        private string $workspace,
+        private string $characterId,
         private string $name,
-        private string $slackId,
         private int $experience = 0,
         private array $skills = [],
         private array $achievements = [],
@@ -43,10 +38,8 @@ class Character
     }
 
     /**
-     * @param CharacterId $characterId
-     * @param string $workspace
+     * @param string $characterId
      * @param string $name
-     * @param string $slackId
      * @param int $experience
      * @param BasePropertyInterface[] $skills
      * @param BasePropertyInterface[] $achievements
@@ -54,25 +47,19 @@ class Character
      * @return self
      */
     public static function create(
-        CharacterId $characterId,
-        string $workspace,
+        string $characterId,
         string $name,
-        string $slackId,
         int $experience = 0,
         array $skills = [],
         array $achievements = [],
         array $attributes = [],
     ): self {
-        if ('' === $workspace) {
-            throw new InvalidWorkspaceException("A workspace cannot be empty");
-        }
-
         if ('' === $name) {
             throw new UserNameMissingException("A character needs a name");
         }
 
-        if ('' === $slackId) {
-            throw new SlackIdMissingException("A character needs a slack id");
+        if ('' === $characterId) {
+            throw new IdMissingException("A character needs an id");
         }
 
         if (self::MIN_EXPERIENCE > $experience) {
@@ -81,30 +68,17 @@ class Character
             );
         }
 
-        return new self($characterId, $workspace, $name, $slackId, $experience, $skills, $achievements, $attributes);
+        return new self($characterId, $name, $experience, $skills, $achievements, $attributes);
     }
 
     public function getCharacterId(): string
     {
-        return $this->characterId->toString();
-    }
-
-    public function getWorkspace(): string
-    {
-        return $this->workspace;
+        return $this->characterId;
     }
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlackId(): string
-    {
-        return $this->slackId;
     }
 
     public function getLevel(): int

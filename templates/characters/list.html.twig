@@ -1,7 +1,7 @@
 {% if characters|length > 0 %}
-    {% for character in characters %}
-        {{ character.name }} {{ character.level }}
-    {% endfor %}
+    | Name | XP | Level |
+{% for character in characters %}| {{ character.name }} | {{ character.experience }} | {{ character.level }} |
+{% endfor %}
 {% else %}
     No characters found
 {% endif %}

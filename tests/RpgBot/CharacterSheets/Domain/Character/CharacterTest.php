@@ -6,76 +6,63 @@ namespace Tests\RpgBot\CharacterSheets\Domain\Character;
 
 use RpgBot\CharacterSheets\Domain\Character\Character;
 use PHPUnit\Framework\TestCase;
-use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidExperienceException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\InvalidWorkspaceException;
-use RpgBot\CharacterSheets\Domain\Character\Exception\SlackIdMissingException;
+use RpgBot\CharacterSheets\Domain\Character\Exception\IdMissingException;
 use RpgBot\CharacterSheets\Domain\Character\Exception\UserNameMissingException;
 
 class CharacterTest extends TestCase
 {
     public function testCharacterCreation(): void
     {
-        $characterId = CharacterId::generate();
+        $characterId = 'XXXXXXX';
         $name = 'oswald';
-        $workspace = 'slackspace';
-        $slackId = 'XXXXXXX';
 
-        $character = Character::create($characterId, $workspace, $name, $slackId);
+        $character = Character::create($characterId, $name);
 
-        $this->assertSame($characterId->toString(), $character->getCharacterId());
-        $this->assertSame($workspace, $character->getWorkspace());
+        $this->assertSame($characterId, $character->getCharacterId());
         $this->assertSame($name, $character->getName());
         $this->assertSame(1, $character->getLevel());
     }
 
     public function testCharacterProgressionWithExp(): void
     {
-        $characterId = CharacterId::generate();
+        $characterId = 'XXXXXXX';
         $name = 'oswald';
-        $workspace = 'slackspace';
-        $slackId = 'XXXXXXX';
 
-        $character = Character::create($characterId, $workspace, $name, $slackId, 0);
+        $character = Character::create($characterId, $name, 0);
         $this->assertSame(1, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, $slackId, 49);
+        $character = Character::create($characterId, $name, 49);
         $this->assertSame(1, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, $slackId, 50);
+        $character = Character::create($characterId, $name, 50);
         $this->assertSame(2, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, $slackId, 51);
+        $character = Character::create($characterId, $name, 51);
         $this->assertSame(2, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, $slackId, 150);
+        $character = Character::create($characterId, $name, 150);
         $this->assertSame(3, $character->getLevel());
 
-        $character = Character::create($characterId, $workspace, $name, $slackId, 5000);
+        $character = Character::create($characterId, $name, 5000);
         $this->assertSame(14, $character->getLevel());
     }
 
-    public function testCharacterWorkspaceEmptyException(): void
+    public function testCharacterHasNoIdException(): void
     {
-        $this->expectException(InvalidWorkspaceException::class);
-        Character::create(CharacterId::generate(), '', 'name', 'XXXXXXX', 5);
-    }
-
-    public function testCharacterHasNoSlackIdException(): void
-    {
-        $this->expectException(SlackIdMissingException::class);
-        Character::create(CharacterId::generate(), 'lalala', 'name', '', 5);
+        $this->expectException(IdMissingException::class);
+        Character::create('', 'name', 5);
     }
 
     public function testCharacterNameEmptyException(): void
     {
         $this->expectException(UserNameMissingException::class);
-        Character::create(CharacterId::generate(), 'xy', '', 'XXXXXXX', 5);
+        Character::create('XXXXXXX', '', 5);
     }
 
     public function testInvalidExperienceException(): void
     {
         $this->expectException(InvalidExperienceException::class);
-        Character::create(CharacterId::generate(), 'xy', 'test', 'XXXXXXX', -5);
+        Character::create('XXXXXXX', 'test', -5);
     }
 }

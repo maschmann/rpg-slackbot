@@ -9,17 +9,11 @@ use RpgBot\CharacterSheets\Application\Command\Contract\CommandInterface;
 class CharacterSetPropertyCommand implements CommandInterface
 {
     public function __construct(
-        private string $workspace,
         private string $name,
         private string $type,
         private string $property,
         private string $level,
     ) {
-    }
-
-    public function getWorkspace(): string
-    {
-        return $this->workspace;
     }
 
     public function getName(): string

@@ -125,4 +125,9 @@ class CallDataDto
     {
         return $this->args;
     }
+
+    public function getId(): string
+    {
+        return $this->userId . "_" . $this->teamId;
+    }
 }

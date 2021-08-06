@@ -6,7 +6,6 @@ namespace RpgBot\CharacterSheets\Infrastructure;
 
 use RpgBot\CharacterSheets\Domain\Character\Achievement;
 use RpgBot\CharacterSheets\Domain\Character\Attribute;
-use RpgBot\CharacterSheets\Domain\Character\CharacterId;
 use RpgBot\CharacterSheets\Domain\Character\Contract\BasePropertyInterface;
 use RpgBot\CharacterSheets\Domain\Character\Character;
 use RpgBot\CharacterSheets\Domain\Character\Contract\CharacterRepositoryInterface;
@@ -78,7 +77,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $attributes = [];
 
         $characterRaw = $this->connection->fetchAssociative(
-            'SELECT id, workspace, name, slack_id, experience FROM characters WHERE slack_id = ?',
+            'SELECT id, name, experience FROM characters WHERE id = ?',
             [
                 $slackId,
             ]
@@ -121,10 +120,8 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         }
 
         return Character::create(
-            CharacterId::fromString($characterRaw['id']),
-            $characterRaw['workspace'],
+            $characterRaw['id'],
             $characterRaw['name'],
-            $characterRaw['slack_id'],
             (int)$characterRaw['experience'],
             $skills,
             $achievements,
@@ -139,18 +136,16 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
     {
         $characterList = [];
 
-        $characterListRaw = $this->connection->fetchAssociative(
+        $characterListRaw = $this->connection->fetchAllAssociative(
             'SELECT id, name, experience FROM characters'
         );
 
-        if (false !== $characterListRaw) {
+        if (false != $characterListRaw) {
             $characterList = \array_map(
                 function (array $row) {
                     return Character::create(
-                        CharacterId::fromString($row['id']),
-                        $row['workspace'],
+                        $row['id'],
                         $row['name'],
-                        $row['slack_id'],
                         (int)$row['experience']
                     );
                 },
@@ -167,9 +162,7 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
             'characters',
             [
                 'id' => $character->getCharacterId(),
-                'workspace' => $character->getWorkspace(),
                 'name' => $character->getName(),
-                'slack_id' => $character->getSlackId(),
                 'experience' => $character->getExperience(),
             ]
         );

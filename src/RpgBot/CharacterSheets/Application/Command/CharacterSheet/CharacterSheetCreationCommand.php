@@ -9,27 +9,18 @@ use RpgBot\CharacterSheets\Application\Command\Contract\CommandInterface;
 class CharacterSheetCreationCommand implements CommandInterface
 {
     public function __construct(
-        private string $workspace,
+        private string $userId,
         private string $name,
-        private string $slackId,
     ) {
+    }
+
+    public function getId(): string
+    {
+        return $this->userId;
     }
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getWorkspace(): string
-    {
-        return $this->workspace;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlackId(): string
-    {
-        return $this->slackId;
     }
 }

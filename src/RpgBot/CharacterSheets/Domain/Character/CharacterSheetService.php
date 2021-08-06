@@ -16,7 +16,7 @@ class CharacterSheetService
 
     public function create(Character $character): void
     {
-        $this->checkIfUserAlreadyExists($character->getSlackId(), $character->getName());
+        $this->checkIfUserAlreadyExists($character);
         $this->characterRepository->create($character);
     }
 
@@ -33,11 +33,15 @@ class CharacterSheetService
         return $this->characterRepository->getAll();
     }
 
-    private function checkIfUserAlreadyExists(string $slackId, string $name): void
+    private function checkIfUserAlreadyExists(Character $character): void
     {
-        if (null !== $this->characterRepository->getBySlackId($slackId)) {
+        if (null !== $this->characterRepository->getBySlackId($character->getCharacterId())) {
             throw new UserAlreadyExistsException(
-                sprintf("The user with name %s and id %s already exists!", $name, $slackId)
+                sprintf(
+                    "The user with name %s and id %s already exists!",
+                    $character->getName(),
+                    $character->getCharacterId()
+                )
             );
         };
     }

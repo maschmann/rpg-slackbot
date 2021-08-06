@@ -26,7 +26,6 @@ class CharacterSheetQuery
         if ($character) {
             return new CharacterDto(
                 $character->getName(),
-                $character->getSlackId(),
                 $character->getLevel(),
                 $character->getExperience(),
                 $this->convertProperties($character->getSkills(), SkillDto::class),
@@ -47,7 +46,6 @@ class CharacterSheetQuery
         return \array_map(function (Character $item) {
             return new CharacterDto(
                 $item->getName(),
-                $item->getSlackId(),
                 $item->getLevel(),
                 $item->getExperience(),
                 $this->convertProperties($item->getSkills(), SkillDto::class),
