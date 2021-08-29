@@ -95,7 +95,7 @@ EOF;
         $this->assertInstanceOf(HandshakeEventDto::class, $handshake);
         $this->assertSame(
             '3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P',
-            $handshake->getChallenge()
+            $handshake->challenge()
         );
     }
 
@@ -104,8 +104,8 @@ EOF;
         $slack = new SlackEvent('some_token');
         $event = $slack->handleEvent($this->bodyRaw, $this->getClientMock());
         $this->assertInstanceOf(UserEventDto::class, $event);
-        $this->assertSame(SlackEvent::TYPE_APP_MENTION, $event->getType());
-        $this->assertSame(SlackEvent::ACTION_LIST_CHARACTERS, $event->getAction());
+        $this->assertSame(SlackEvent::TYPE_APP_MENTION, $event->type());
+        $this->assertSame(SlackEvent::ACTION_LIST_CHARACTERS, $event->action());
     }
 
     public function testThrowsInvalidBodyException(): void

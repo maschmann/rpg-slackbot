@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Slack\Infrastructure;
 
 use App\Slack\Dto\CallDataDto;
+use App\Slack\Dto\CharacterCreationActionStateDto;
 use App\Slack\Infrastructure\Exception\InvalidBodyException;
 
 /**
@@ -27,6 +28,7 @@ class SlackCall
         $command = $requestData['command'] && $requestData['command'] !== ''
             ? $requestData['command'] : throw new InvalidBodyException("No command given");
         $text = $requestData['text'] ?? '';
+        $triggerId = $requestData['trigger_id'] ?? '';
 
         $matches = [];
         preg_match_all('/<@(?P<user_id>[a-zA-Z]+)\|(?P<user_name>.+)>(?P<args>.+)?/', $text, $matches);
@@ -45,7 +47,43 @@ class SlackCall
             $userId,
             $command,
             $text,
-            $args
+            $args,
+            $triggerId
         );
+    }
+
+    /**
+     * @param array<string,mixed> $requestData
+     * @return bool
+     */
+    public function isSaveAction(array $requestData): bool
+    {
+        if (!empty($requestData['payload']['actions'])) {
+            foreach ($requestData['payload']['actions'] as $action) {
+                if (!empty($action['block_id']) && 'save-button' === $action['block_id']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array<string,mixed> $requestData
+     * @return CharacterCreationActionStateDto
+     */
+    public function extractStateFromAction(array $requestData): CharacterCreationActionStateDto
+    {
+        $characterClass = 'empty';
+        if (!empty($requestData['payload']['view']['state'])) {
+            foreach ($requestData['payload']['view']['state'] as $state) {
+                if (!empty($state['block_id']) && 'save-button' === $action['block_id']) {
+                    return true;
+                }
+            }
+        }
+
+        return CharacterCreationActionStateDto::create($characterClass);
     }
 }

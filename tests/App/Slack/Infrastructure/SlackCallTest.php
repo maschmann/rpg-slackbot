@@ -28,9 +28,9 @@ class SlackCallTest extends TestCase
 
         $this->assertInstanceOf(CallDataDto::class, $extractedData);
         // test the extracted target users
-        $this->assertSame('XXXXXX', $extractedData->getUserId());
-        $this->assertSame('DerBoese', $extractedData->getUserName());
-        $this->assertSame('test', $extractedData->getArgs());
+        $this->assertSame('XXXXXX', $extractedData->userId());
+        $this->assertSame('DerBoese', $extractedData->userName());
+        $this->assertSame('test', $extractedData->args());
     }
 
     public function testUseFallbackDataForUserAndId(): void
@@ -50,9 +50,9 @@ class SlackCallTest extends TestCase
 
         $this->assertInstanceOf(CallDataDto::class, $extractedData);
         // test the extracted target users
-        $this->assertSame('UEVVARTKR', $extractedData->getUserId());
-        $this->assertSame('maschmann', $extractedData->getUserName());
-        $this->assertSame('', $extractedData->getArgs());
+        $this->assertSame('UEVVARTKR', $extractedData->userId());
+        $this->assertSame('maschmann', $extractedData->userName());
+        $this->assertSame('', $extractedData->args());
     }
 
     public function testFailsWhenTeamIdIsMissing(): void

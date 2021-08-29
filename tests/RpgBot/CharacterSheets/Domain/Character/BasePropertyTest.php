@@ -17,8 +17,8 @@ class BasePropertyTest extends TestCase
 
         $attribute = BaseProperty::create($name, $level);
 
-        $this->assertSame($name, $attribute->getName());
-        $this->assertSame($level, $attribute->getLevel());
+        $this->assertSame($name, $attribute->name());
+        $this->assertSame($level, $attribute->level());
     }
 
     public function testBasePropertyLowerLimitException(): void

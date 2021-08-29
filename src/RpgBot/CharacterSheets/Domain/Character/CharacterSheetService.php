@@ -35,12 +35,12 @@ class CharacterSheetService
 
     private function checkIfUserAlreadyExists(Character $character): void
     {
-        if (null !== $this->characterRepository->getBySlackId($character->getCharacterId())) {
+        if (null !== $this->characterRepository->getBySlackId($character->characterId())) {
             throw new UserAlreadyExistsException(
                 sprintf(
                     "The user with name %s and id %s already exists!",
-                    $character->getName(),
-                    $character->getCharacterId()
+                    $character->name(),
+                    $character->characterId()
                 )
             );
         };

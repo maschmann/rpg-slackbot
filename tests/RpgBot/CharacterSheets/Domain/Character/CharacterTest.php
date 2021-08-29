@@ -19,9 +19,9 @@ class CharacterTest extends TestCase
 
         $character = Character::create($characterId, $name);
 
-        $this->assertSame($characterId, $character->getCharacterId());
-        $this->assertSame($name, $character->getName());
-        $this->assertSame(1, $character->getLevel());
+        $this->assertSame($characterId, $character->characterId());
+        $this->assertSame($name, $character->name());
+        $this->assertSame(1, $character->level());
     }
 
     public function testCharacterProgressionWithExp(): void
@@ -30,22 +30,22 @@ class CharacterTest extends TestCase
         $name = 'oswald';
 
         $character = Character::create($characterId, $name, 0);
-        $this->assertSame(1, $character->getLevel());
+        $this->assertSame(1, $character->level());
 
         $character = Character::create($characterId, $name, 49);
-        $this->assertSame(1, $character->getLevel());
+        $this->assertSame(1, $character->level());
 
         $character = Character::create($characterId, $name, 50);
-        $this->assertSame(2, $character->getLevel());
+        $this->assertSame(2, $character->level());
 
         $character = Character::create($characterId, $name, 51);
-        $this->assertSame(2, $character->getLevel());
+        $this->assertSame(2, $character->level());
 
         $character = Character::create($characterId, $name, 150);
-        $this->assertSame(3, $character->getLevel());
+        $this->assertSame(3, $character->level());
 
         $character = Character::create($characterId, $name, 5000);
-        $this->assertSame(14, $character->getLevel());
+        $this->assertSame(14, $character->level());
     }
 
     public function testCharacterHasNoIdException(): void

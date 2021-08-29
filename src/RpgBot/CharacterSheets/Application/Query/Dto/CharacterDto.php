@@ -26,17 +26,17 @@ class CharacterDto
     ) {
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function getLevel(): int
+    public function level(): int
     {
         return $this->level;
     }
 
-    public function getExperience(): int
+    public function experience(): int
     {
         return $this->experience;
     }
@@ -44,7 +44,7 @@ class CharacterDto
     /**
      * @return PropertyDtoInterface[]
      */
-    public function getSkills(): array
+    public function skills(): array
     {
         return $this->skills;
     }
@@ -52,7 +52,7 @@ class CharacterDto
     /**
      * @return PropertyDtoInterface[]
      */
-    public function getAttributes(): array
+    public function attributes(): array
     {
         return $this->attributes;
     }
@@ -60,7 +60,7 @@ class CharacterDto
     /**
      * @return PropertyDtoInterface[]
      */
-    public function getAchievements(): array
+    public function achievements(): array
     {
         return $this->achievements;
     }

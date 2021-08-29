@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Slack\Infrastructure\SlackCall;
+use App\Slack\Infrastructure\SlackEvent;
+use App\Slack\Infrastructure\SlackFormView;
 use Psr\Log\LoggerInterface;
 use RpgBot\CharacterSheets\Application\Command\CharacterSheet\CharacterSheetCreationCommand;
 use RpgBot\CharacterSheets\Application\Query\CharacterSheetQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -21,14 +22,16 @@ use Symfony\Component\Routing\Annotation\Route;
  * We're not really working with an API approach anymore, since I'd expect it to be REST or GraphQL for
  * slack. But as it seems, slack wants nicely formatted strings plus some HTTP code.
  */
-#[Route('api/characters')]
-class CharacterController extends AbstractController
+#[Route('api/slack_slash/characters')]
+class SlackSlashCharacterController extends AbstractController
 {
     public function __construct(
         private CharacterSheetQuery $sheetQuery,
         private MessageBusInterface $commandBus,
         private LoggerInterface $logger,
         private SlackCall $slackCall,
+        private SlackEvent $slackEvent,
+        private SlackFormView $slackFormView,
     ) {
     }
 
@@ -50,7 +53,7 @@ class CharacterController extends AbstractController
     public function byId(Request $request): Response
     {
         $requestData = $this->slackCall->extractCallData($request->request->all());
-        $character = $this->sheetQuery->getBySlackId($requestData->getId());
+        $character = $this->sheetQuery->getBySlackId($requestData->id());
 
         return $this->render(
             'characters/character.html.twig',
@@ -67,16 +70,46 @@ class CharacterController extends AbstractController
 
         $this->commandBus->dispatch(
             new CharacterSheetCreationCommand(
-                $requestData->getId(),
-                $requestData->getUserName()
+                $requestData->id(),
+                $requestData->userName()
             )
         );
 
         return $this->render(
             'characters/create.html.twig',
             [
-                'name' => $requestData->getUserName(),
+                'name' => $requestData->userName(),
             ]
         );
+    }
+
+    #[Route('/test', name: 'characters_test', methods: ['POST'])]
+    public function modalCreate(Request $request): Response
+    {
+        $this->logger->info(print_r($request->request->all(), true));
+        $requestData = $this->slackCall->extractCallData($request->request->all());
+
+        $client = $this->slackEvent->client();
+        $client->viewsOpen(
+            [
+                'trigger_id' => $requestData->triggerId(),
+                'view' => $this->slackFormView->characterForm($requestData->userName()),
+            ]
+        );
+
+        return new Response();
+    }
+
+    #[Route('/receive-modal', name: 'characters_create_modal', methods: ['POST'])]
+    public function modalReceive(Request $request): Response
+    {
+        $requestData = $request->request->all();
+        $this->logger->info(print_r(json_decode($requestData['payload']), true));
+
+        if ($this->slackCall->isSaveAction($requestData)) {
+            $characterClass = $this->slackCall->extractStateFromAction($requestData);
+        }
+
+        return new Response();
     }
 }

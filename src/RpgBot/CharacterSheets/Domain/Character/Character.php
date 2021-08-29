@@ -12,7 +12,7 @@ use RpgBot\CharacterSheets\Domain\Character\Exception\UserNameMissingException;
 /**
  * Aggregate root
  */
-class Character
+final class Character
 {
     private const MIN_EXPERIENCE = 0;
 
@@ -70,23 +70,23 @@ class Character
         return new self($characterId, $name, $experience, $skills, $achievements, $attributes);
     }
 
-    public function getCharacterId(): string
+    public function characterId(): string
     {
         return $this->characterId;
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function getLevel(): int
+    public function level(): int
     {
         // arithmetic levelling progression, based on quadratic equation
         return (1 + (int)floor((sqrt(625 + 100 * $this->experience) - 25) / 50));
     }
 
-    public function getExperience(): int
+    public function experience(): int
     {
         return $this->experience;
     }
@@ -94,7 +94,7 @@ class Character
     /**
      * @return BasePropertyInterface[]
      */
-    public function getSkills(): array
+    public function skills(): array
     {
         return $this->skills;
     }
@@ -102,7 +102,7 @@ class Character
     /**
      * @return BasePropertyInterface[]
      */
-    public function getAttributes(): array
+    public function attributes(): array
     {
         return $this->attributes;
     }
@@ -110,7 +110,7 @@ class Character
     /**
      * @return BasePropertyInterface[]
      */
-    public function getAchievements(): array
+    public function achievements(): array
     {
         return $this->achievements;
     }

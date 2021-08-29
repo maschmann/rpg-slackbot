@@ -1,17 +1,20 @@
 # RPG Slackbot
 
-This is an attempt to build a slack app with basic RPG bot capabilities.
+This is an attempt to build a slack app with basic RPG bot capabilities for _developers_. You'll have a [design type](http://design-types.net/types.html) and a few RPG like actions you can use.
+
 The idea behind this is to have app_mentions (events) and slash commands to create/list/show and modify user accounts in the internal database. 
 
-So you can add properties like "sarcasm" or other funstuff.
+So you can add skills like "sarcasm" or other funstuff.
 
 I'll also add a larger list of design patterns you can either use or let the bot post to the channel to make a point. 
 The characters will also be able to have some design patterns as skills.
 
+Basically I'm just wasting my time, fiddling around with the slack app API, getting back on track with symfony and experimenting with architectural concepts.
+
 ## Attention
 
 At this point there is no specific endpoint security!!!
-Either handle this by yourself or change the firewall to only accept requests from slack itself!
+Either handle this by yourself or configure the firewall to only accept requests from slack itself and your specific user!
 
 ## Installation
 

@@ -17,6 +17,7 @@ class CallDataDto
         private string $command,
         private string $text,
         private string $args,
+        private string $triggerId,
     ) {
     }
 
@@ -31,6 +32,7 @@ class CallDataDto
         string $command,
         string $text,
         string $args,
+        string $triggerId,
     ): self {
         return new self(
             $teamId,
@@ -42,92 +44,69 @@ class CallDataDto
             $userId,
             $command,
             $text,
-            $args
+            $args,
+            $triggerId
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getTeamId(): string
+    public function teamId(): string
     {
         return $this->teamId;
     }
 
-    /**
-     * @return string
-     */
-    public function getChannelId(): string
+    public function channelId(): string
     {
         return $this->channelId;
     }
 
-    /**
-     * @return string
-     */
-    public function getChannelName(): string
+    public function channelName(): string
     {
         return $this->channelName;
     }
 
-    /**
-     * @return string
-     */
-    public function getCallingUser(): string
+    public function callingUser(): string
     {
         return $this->callingUser;
     }
 
-    /**
-     * @return string
-     */
-    public function getCallingUserId(): string
+    public function callingUserId(): string
     {
         return $this->callingUserId;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserName(): string
+    public function userName(): string
     {
         return $this->userName;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserId(): string
+    public function userId(): string
     {
         return $this->userId;
     }
 
-    /**
-     * @return string
-     */
-    public function getCommand(): string
+    public function command(): string
     {
         return $this->command;
     }
 
-    /**
-     * @return string
-     */
-    public function getText(): string
+    public function text(): string
     {
         return $this->text;
     }
 
-    /**
-     * @return string
-     */
-    public function getArgs(): string
+    public function args(): string
     {
         return $this->args;
     }
 
-    public function getId(): string
+    public function id(): string
     {
         return $this->userId . "_" . $this->teamId;
     }
+
+    public function triggerId(): string
+    {
+        return $this->triggerId;
+    }
+
 }

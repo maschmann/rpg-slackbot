@@ -22,10 +22,7 @@ class HandshakeEventDto implements EventDtoInterface
         return new self($handshake['challenge']);
     }
 
-    /**
-     * @return string
-     */
-    public function getChallenge(): string
+    public function challenge(): string
     {
         return $this->challenge;
     }

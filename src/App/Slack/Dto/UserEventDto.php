@@ -36,55 +36,37 @@ class UserEventDto implements EventDtoInterface
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getWorkspace(): string
+    public function workspace(): string
     {
         return $this->workspace;
     }
 
-    /**
-     * @return string
-     */
-    public function getChannel(): string
+    public function channel(): string
     {
         return $this->channel;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserId(): string
+    public function userId(): string
     {
         return $this->userId;
     }
 
-    public function getId(): string
+    public function id(): string
     {
         return $this->userId . "_" . $this->workspace;
     }
 
-    /**
-     * @return string
-     */
-    public function getType(): string
+    public function type(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
-    public function getAction(): string
+    public function action(): string
     {
         return $this->action;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserName(): string
+    public function userName(): string
     {
         return $this->userName;
     }

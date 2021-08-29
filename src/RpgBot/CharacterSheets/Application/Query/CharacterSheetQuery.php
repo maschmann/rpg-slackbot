@@ -25,12 +25,12 @@ class CharacterSheetQuery
         $character = $this->repository->getBySlackId($slackId);
         if ($character) {
             return new CharacterDto(
-                $character->getName(),
-                $character->getLevel(),
-                $character->getExperience(),
-                $this->convertProperties($character->getSkills(), SkillDto::class),
-                $this->convertProperties($character->getAchievements(), AchievementDto::class),
-                $this->convertProperties($character->getAttributes(), AttributeDto::class),
+                $character->name(),
+                $character->level(),
+                $character->experience(),
+                $this->convertProperties($character->skills(), SkillDto::class),
+                $this->convertProperties($character->achievements(), AchievementDto::class),
+                $this->convertProperties($character->attributes(), AttributeDto::class),
             );
         }
 
@@ -45,12 +45,12 @@ class CharacterSheetQuery
         $results = $this->repository->getAll();
         return \array_map(function (Character $item) {
             return new CharacterDto(
-                $item->getName(),
-                $item->getLevel(),
-                $item->getExperience(),
-                $this->convertProperties($item->getSkills(), SkillDto::class),
-                $this->convertProperties($item->getAchievements(), AchievementDto::class),
-                $this->convertProperties($item->getAttributes(), AttributeDto::class),
+                $item->name(),
+                $item->level(),
+                $item->experience(),
+                $this->convertProperties($item->skills(), SkillDto::class),
+                $this->convertProperties($item->achievements(), AchievementDto::class),
+                $this->convertProperties($item->attributes(), AttributeDto::class),
             );
         }, $results);
     }
@@ -65,8 +65,8 @@ class CharacterSheetQuery
         return \array_map(
             function (BasePropertyInterface $item) use ($class) {
                 return new $class(
-                    $item->getName(),
-                    $item->getLevel(),
+                    $item->name(),
+                    $item->level(),
                 );
             },
             $properties

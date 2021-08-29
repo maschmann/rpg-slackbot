@@ -16,7 +16,7 @@ class BaseProperty implements BasePropertyInterface
 
     private function __construct(
         private string $name,
-        private int $level
+        private int $level,
     ) {
     }
 
@@ -31,12 +31,12 @@ class BaseProperty implements BasePropertyInterface
         return new self($name, $level);
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function getLevel(): int
+    public function level(): int
     {
         return $this->level;
     }

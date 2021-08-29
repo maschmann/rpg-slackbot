@@ -21,13 +21,13 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('api/slack')]
-class SlackAppController
+#[Route('api/slack_mention')]
+class SlackAppMentionController
 {
     public function __construct(
         private LoggerInterface $logger,
         private SlackEvent $slack,
-        private CharacterSheetQuery $characterSheetQuery, // not a 100% sure if a message bus wouldn't be better
+        private CharacterSheetQuery $characterSheetQuery, // not a 100% sure if a query bus wouldn't be better
         private MessageBusInterface $commandBus,
         private SerializerInterface $serializer,
     ) {
@@ -45,6 +45,7 @@ class SlackAppController
     public function receive(Request $request): JsonResponse
     {
         $client = $this->slack->client();
+
         $status = 200;
         $body = (string)$request->getContent();
         $this->logger->debug($body);
@@ -55,7 +56,7 @@ class SlackAppController
         if (is_a($eventDto, HandshakeEventDto::class)) {
             return new JsonResponse(
                 [
-                    'challenge' => $eventDto->getChallenge(),
+                    'challenge' => $eventDto->challenge(),
                 ]
             );
         }
@@ -65,12 +66,12 @@ class SlackAppController
             try {
                 try {
                     // no default action needed, will throw an exception
-                    switch ($eventDto->getAction()) {
+                    switch ($eventDto->action()) {
                         case SlackEvent::ACTION_LIST_CHARACTERS:
                             $characterList = $this->characterSheetQuery->getAll();
                             break;
                         case SlackEvent::ACTION_GET_CHARACTER:
-                            $character = $this->characterSheetQuery->getBySlackId($eventDto->getId());
+                            $character = $this->characterSheetQuery->getBySlackId($eventDto->id());
                             if (null === $character) {
                                 $payload['message'] = "You don't have a character yet";
                             }

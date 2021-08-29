@@ -23,18 +23,18 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
     public function store(Character $character): void
     {
         $properties = array_merge(
-            $character->getSkills(),
-            $character->getAchievements(),
-            $character->getAttributes(),
+            $character->skills(),
+            $character->achievements(),
+            $character->attributes(),
         );
 
         $this->connection->update(
             'characters',
             [
-                'experience' => $character->getExperience(),
+                'experience' => $character->experience(),
             ],
             [
-                'id' => $character->getCharacterId(),
+                'id' => $character->characterId(),
             ]
         );
 
@@ -43,11 +43,11 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
                 $this->connection->update(
                     'properties',
                     [
-                        'level' => $property->getLevel(),
+                        'level' => $property->level(),
                     ],
                     [
-                        'id' => $character->getCharacterId(),
-                        'name' => $property->getName(),
+                        'id' => $character->characterId(),
+                        'name' => $property->name(),
                         'type' => $property::class,
                     ]
                 );
@@ -58,9 +58,16 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
     public function delete(Character $character): void
     {
         $this->connection->delete(
+            'properties',
+            [
+                'character_id' => $character->characterId(),
+            ]
+        );
+
+        $this->connection->delete(
             'characters',
             [
-                'name' => $character->getName(),
+                'id' => $character->characterId(),
             ]
         );
     }
@@ -161,9 +168,9 @@ class DbalCharacterSheetRepository implements CharacterRepositoryInterface
         $this->connection->insert(
             'characters',
             [
-                'id' => $character->getCharacterId(),
-                'name' => $character->getName(),
-                'experience' => $character->getExperience(),
+                'id' => $character->characterId(),
+                'name' => $character->name(),
+                'experience' => $character->experience(),
             ]
         );
     }
